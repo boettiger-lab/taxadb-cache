@@ -1,4 +1,0 @@
-path: []
-extension: bz2
-description: 2020-02-04 cache of GBIF Taxonomic Names in Darwin Core
-type: files
