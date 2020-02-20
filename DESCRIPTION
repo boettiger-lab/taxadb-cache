@@ -1,0 +1,45 @@
+Package: taxadbcache
+Version: 0.1.0
+Title: Backend for generating taxadb cache
+Description: Process many commonly used taxonomic authorities to create a backend for taxadb.
+Authors@R: c(
+            person("Carl", "Boettiger", , "cboettig@gmail.com", c("aut", "cre"),
+                   comment = c(ORCID = "0000-0002-1642-628X")),
+            person("Kari", "Norman", role= "aut",
+                   comment = c(ORCID = "0000-0002-2029-2325"))
+            )
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+Imports:
+    dplyr,
+    readr,
+    stringi,
+    forcats,
+    curl,
+    fs,
+    purrr,
+    tibble,
+    arkdb,
+    DBI,
+    RSQLite,
+    methods,
+    utils,
+    stats,
+    vroom,
+    Hmisc,
+    tidyr,
+    rlang,
+    rfishbase,
+    stringr
+Suggests:
+    spelling,
+    testthat,
+    covr,
+    knitr
+Language: en-US
+VignetteBuilder: knitr
+URL: https://github.com/boettiger-lab/taxadb-cache
+BugReports: https://github.com/boettiger-lab/taxadb-cache/issues
+RoxygenNote: 7.0.2
