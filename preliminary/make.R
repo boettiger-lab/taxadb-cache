@@ -1,22 +1,5 @@
 
-library(conflicted)
-library(tidyverse)
-library(rfishbase) # 3.0
-library(fs)
-library(here)
-library(RSQLite)
-library(drake)
-conflict_prefer("gather", "tidyr")
-conflict_prefer("expand", "tidyr")
-conflict_prefer("filter", "dplyr")
-conflict_prefer("lag", "dplyr")
-conflict_scout()
-
-message(fs::path_wd())
-
 devtools::load_all()
-#plan <- drake_plan(
-
 tag <- "2020"
 dir.create(tag)
 ## 2020 annual not released yet
@@ -26,16 +9,25 @@ ott_source <- "http://files.opentreeoflife.org/ott/ott3.2/ott3.2.tgz"
 gbif_source <- "http://rs.gbif.org/datasets/backbone/backbone-current.zip"
 itis_source <- "https://www.itis.gov/downloads/itisSqlite.zip"
 ncbi_source <- "ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdmp.zip"
-# 
-# contenturi::register_remote(col_source)
-# contenturi::register_remote(ott_source)
-# contenturi::register_remote(gbif_source)
-# contenturi::register_remote(itis_source)
+
+
+generatedBy = "https://github.com/boettiger-lab/taxadb-cache/blob/40cc699b15b005ecfb91a458f32ecbdd434cf295/preliminary/make.R"
+
+
+
+message("ITIS...")
+with_prov(fn = preprocess_itis, 
+          url = itis_source,
+          output_paths = c(dwc = file.path(tag, "dwc_itis.tsv.bz2"),
+                          common = file.path(tag, "common_itis.tsv.bz2")),
+          generatedBy = generatedBy)
 
 
 message("FishBase...")
 fb = preprocess_fb(output_paths = c(dwc = file.path(tag, "dwc_fb.tsv.bz2"),
                                     common = file.path(tag, "common_fb.tsv.bz2")))
+
+
 
 message("SeaLifeBase...")
 
@@ -44,37 +36,36 @@ slb = preprocess_slb(output_paths = c(dwc = file.path(tag, "dwc_slb.tsv.bz2"),
 
 message("OTT...")
 
-ott = preprocess_ott(url = ott_source,
-                     output_paths = c(dwc = file.path(tag, "dwc_ott.tsv.bz2")))
+with_prov(preprocess_ott,
+          url = ott_source,
+          output_paths = c(dwc = file.path(tag, "dwc_ott.tsv.bz2")),
+          generatedBy = generatedBy)
 
 
 message("GBIF...")
 
-gbif = preprocess_gbif(url = gbif_source,
-                       output_paths = c(dwc = file.path(tag, "dwc_gbif.tsv.bz2"),
-                                        common = file.path(tag, "common_gbif.tsv.bz2")))
-
-
-message("ITIS...")
-
-itis = preprocess_itis(url = itis_source,
-                       output_paths = c(dwc = file.path(tag, "dwc_itis.tsv.bz2"),
-                                        common = file.path(tag, "common_itis.tsv.bz2")))
+with_prov(preprocess_gbif,
+          url = gbif_source,
+          output_paths = c(dwc = file.path(tag, "dwc_gbif.tsv.bz2"),
+                           common = file.path(tag, "common_gbif.tsv.bz2")),
+          )
 
 
 message("NCBI...")
-
-ncbi = preprocess_ncbi(url = ncbi_source,
-                       output_paths = c(dwc = file.path(tag, "dwc_ncbi.tsv.bz2"),
-                                        common = file.path(tag, "common_ncbi.tsv.bz2")))
+with_prov(preprocess_ncbi,
+          url = ncbi_source,
+          output_paths = c(dwc = file.path(tag, "dwc_ncbi.tsv.bz2"),
+                           common = file.path(tag, "common_ncbi.tsv.bz2"))
+          )
 
 
 
 message("COL...")
-
-col = preprocess_col(url = col_source,
-                     output_paths = c(dwc = file.path(tag, "dwc_col.tsv.bz2"),
-                                      common = file.path(tag, "common_col.tsv.bz2")))
+with_prov(preprocess_col,
+          url = col_source,
+          output_paths = c(dwc = file.path(tag, "dwc_col.tsv.bz2"),
+                           common = file.path(tag, "common_col.tsv.bz2"))
+          )
 
 
 #)

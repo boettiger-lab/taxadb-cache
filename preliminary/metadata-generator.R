@@ -3,43 +3,59 @@ library(fs)
 library(tidyverse)
 library(here)
 library(jsonlite)
-library(contenturi) # remotes::install_github("cboettig/contenturi@names")
-
+library(contenturi) # remotes::install_github("cboettig/contenturi@drop-type")
 library(piggyback)
+
+
+
 remotes <- piggyback::pb_list("boettiger-lab/taxadb-cache", tag = "2019")
+remote_urls <- piggyback::pb_download_url(remotes$file_name)
 
-piggyback::pb_download_url(remotes$file_name)
-
-file_hash <- function(x, method = openssl::sha256, ...){
-  con <- lapply(x, file, ...)
-  hash <- lapply(con, method)
-  unlist(lapply(hash, as.character))
-}
-
-release <- here::here("2019")
-
-fs::dir_info(release) %>% pull(path)
+#remotes$file_name %>% piggyback::pb_download("boettiger-lab/taxadb-cache", tag = "2019")
 
 
-## slower if we compute hash_uris on uncompressed content!
-meta <- fs::dir_info(release) %>%
-  mutate(sha256_uncompressed = map_chr(path, file_hash, raw = FALSE),
-         sha256_compressed = map_chr(path, file_hash, raw=TRUE),
-         hash_uri = paste0("hash://sha256/", sha256_compressed),
-         name = fs::path_file(path),
-         contentType = "text/tab-separated-values",
-         contentEncoding = "bz2") %>%
-  select(name, size, sha256_uncompressed, sha256_compressed, hash_uri,
-         dateCreated = modification_time,
-         contentType, contentEncoding, path)
+## register published URLs to a remote registry
+ids <- sapply(remote_urls, contenturi::register, registries = "https://hash-archive.org")
+## register to a local registry and the local content store
+##ids2 <- sapply(remote_urls, contenturi::store)
 
+
+tag <- "2019"
+
+
+## DCAT2 terms, http://www.w3.org/ns/dcat#
+meta <- fs::dir_info(tag) %>%
+  select(path, 
+         "dct:byteSize" = size,
+         "dct:issued" = modification_time
+         ) %>%
+  mutate("dct:identifier" = contenturi::content_uri(path),
+         "dct:title" = fs::path_file(path),
+         "dct:mediaType" = "text/tab-separated-values",
+         "dct:compressionFormat" = "bz2",
+         "dct:conformsTo" = "https://dwc.tdwg.org/terms/",
+         "pav:curatedBy" = "https://orcid.org/0000-0002-1642-628X") %>%
+  select(-path)
+
+
+col_meta <- list("dct:title": "Taxonomic names from the Catalogue of Life",
+                 "dct:accessRights": "http://www.catalogueoflife.org/content/terms-use",
+                 "prov:hasPrimarySource": "http://www.catalogueoflife.org/DCA_Export/zip-fixed/2019-annual.zip",
+                 )
+
+shared_meta <- list("dct:mediaType" = "text/tab-separated-values",
+                    "dct:compressionFormat" = "bz2",
+                    "dct:conformsTo" = "https://dwc.tdwg.org/terms/",
+                    "pav:curatedBy" = "https://orcid.org/0000-0002-1642-628X")
+
+
+## schema:filesSize is a text field with units!
+#fileSize = trimws(as.character(size))
 
 ## Lightweight file metadata
-#write_csv(meta, here::here("data-raw/meta.csv"))
+write_csv(meta, file.path(tag,"meta.csv"))
 meta %>%
-  select(-path) %>%
-  #mutate(size = trimws(as.character(size))) %>%
-  write_json(here::here("data-raw/meta.json"),
+  write_json(file.path(tag, "meta.json"),
              pretty = TRUE, auto_unbox=TRUE)
 
 
