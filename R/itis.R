@@ -7,8 +7,8 @@
 #' @import arkdb RSQLite DBI readr dplyr stringr
 preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip",
                             output_paths =
-                              c(dwc = "2019/dwc_itis.tsv.bz2",
-                                common = "2019/common_itis.tsv.bz2")
+                              c(dwc = "2020/dwc_itis.tsv.bz2",
+                                common = "2020/common_itis.tsv.bz2")
 ){
 
   archive <- file.path(tempdir(), "itis",  "itisSqlite.zip")
@@ -20,7 +20,7 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
   unzip(archive, exdir=dir)
   dbname <- list.files(list.dirs(dir, recursive=FALSE), pattern="[.]sqlite", full.names = TRUE)
   db <- DBI::dbConnect(RSQLite::SQLite(), dbname = dbname)
-  arkdb::ark(db, dir, arkdb::streamable_readr_tsv(), lines = 1e6L)
+  arkdb::ark(db, dir, arkdb::streamable_readr_tsv(), lines = 1e6L, overwrite = TRUE)
 
   ## defaulting to logicals is so annoying!
   read_tsv <- function(...) readr::read_tsv(..., quote = "", col_types = readr::cols(.default = "c"))
@@ -103,7 +103,7 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
     distinct() %>%
     select(id, name, rank, common_name, language, path,
            path_rank, path_id, path_rank_id, name_usage, update_date) %>%
-    mutate(update_date = as_date(update_date))
+    mutate(update_date = as.Date(update_date))
 
 
 
@@ -212,7 +212,7 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
   write_tsv(dwc, output_paths["dwc"])
   write_tsv(common, output_paths["common"])
 
-  file_hash(output_paths)
+#  file_hash(output_paths)
 
 }
 #piggyback::pb_upload("dwc/dwc_itis.tsv.bz2", repo = "boettiger-lab/taxadb-cache")

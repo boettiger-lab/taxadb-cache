@@ -1,39 +1,38 @@
-source("data-raw/helper-routines.R")
 preprocess_ncbi <- function(url,
                             output_paths =
                               c(dwc = "2020/dwc_ncbi.tsv.gz",
                                 common = "2020/common_ncbi.tsv.gz")){
-
-
+  
+  
   dir <- file.path(tempdir(), "ncbi")
   archive <- file.path(dir, "taxdmp.zip")
   dir.create(dir, FALSE, FALSE)
   download.file(url, archive)
   message(paste(file_hash(archive)))
-
-
+  
+  
   unzip(archive, exdir=dir)
-
+  
   node_cols <- c(
-  "tax_id",
-  "parent_tax_id",
-  "rank",
-  "embl_code",
-  "division_id",
-  "inherited_div_flag",
-  "genetic_code_id",
-  "inherited_GC_flag",
-  "mitochondrial_genetic_code_id",
-  "inherited_MGC_flag",
-  "GenBank_hidden_flag",
-  "hidden_subtree_root",
-  "comments"
+    "tax_id",
+    "parent_tax_id",
+    "rank",
+    "embl_code",
+    "division_id",
+    "inherited_div_flag",
+    "genetic_code_id",
+    "inherited_GC_flag",
+    "mitochondrial_genetic_code_id",
+    "inherited_MGC_flag",
+    "GenBank_hidden_flag",
+    "hidden_subtree_root",
+    "comments"
   )
-node_types <- c("iiclilililllc")
-
+  node_types <- c("iiclilililllc")
+  
   nodes <- vroom::vroom(file.path(dir, "nodes.dmp"), quote = "", delim = "\t|\t",
-                             col_names = node_cols, col_types = node_types)
-
+                        col_names = node_cols, col_types = node_types)
+  
   name_cols <- c("tax_id", "name_txt", "unique_name", "name_class", "blank")
   name_type <- c("icccc")
   names <-  vroom::vroom(file.path(dir, "names.dmp"),
@@ -43,21 +42,21 @@ node_types <- c("iiclilililllc")
   ncbi_taxa <-
     inner_join(nodes,names) %>%
     select(tax_id, parent_tax_id, rank, name_txt, unique_name, name_class)
-
-
+  
+  
   ncbi_ids <- ncbi_taxa %>%
     select(tsn = tax_id, parent_tsn = parent_tax_id) %>%
     distinct() %>%
     mutate(tsn = paste0("NCBI:", tsn),
            parent_tsn = paste0("NCBI:", parent_tsn))
-
+  
   ## note: NCBI doesn't have rank ids
   ncbi <- ncbi_taxa %>%
     select(id = tax_id, name = name_txt, rank, name_type = name_class) %>%
     mutate(id = paste0("NCBI:", id))
-
+  
   rm(list= c ("ncbi_taxa", "nodes", "names"))
-
+  
   ## Recursively JOIN on id = parent
   ## FIXME do properly with recursive function and dplyr programming calls
   recursive_ncbi_ids <- ncbi_ids %>%
@@ -98,11 +97,11 @@ node_types <- c("iiclilililllc")
     left_join(rename(ncbi_ids, p36 = parent_tsn), by = c("p35" = "tsn")) %>%
     left_join(rename(ncbi_ids, p37 = parent_tsn), by = c("p36" = "tsn")) %>%
     left_join(rename(ncbi_ids, p38 = parent_tsn), by = c("p37" = "tsn"))
-
+  
   rm(ncbi_ids)
   ## expect_true: confirm we have resolved all ids
   all(recursive_ncbi_ids[[length(recursive_ncbi_ids)]] == "NCBI:1")
-
+  
   ## many more ids than path_ids
   long_hierarchy <-
     recursive_ncbi_ids %>%
@@ -110,47 +109,47 @@ node_types <- c("iiclilililllc")
     select(id = tsn, path_id) %>%
     distinct() %>%
     arrange(id)
-
+  
   rm(recursive_ncbi_ids)
-
+  
   expand <- ncbi %>%
     select(path_id = id, path = name, path_rank = rank, path_type = name_type)
-
+  
   ncbi_long <- ncbi %>%
     filter(name_type == "scientific name") %>%
     select(-name_type) %>%
     inner_join(long_hierarchy) %>%
     inner_join(expand)
-
+  
   ## Example query: how many species of fishes do we know?
   #fishes <- ncbi_long %>%
   #  filter(path == "fishes", rank == "species") %>%
   #  select(id, name, rank) %>% distinct()
   # 33,082 known species
-
+  
   ## de-duplication of duplicate ranks
   tmp1 <- ncbi_long %>%
-  #filter(path_type == "scientific name", rank == "species") %>%
+    #filter(path_type == "scientific name", rank == "species") %>%
     select(id, species = name, path, path_rank) %>%
     distinct() %>%
     # ncbii has a few duplicate "superfamily" with both as "scientific name"
     # This is probably a bug in there data as one of these should be "synonym"(?)
     filter(path_rank != "no rank") %>% ## Wide format includes named ranks only
     filter(path_rank != "superfamily")
-
+  
   tmp2 <- tmp1 %>% group_by(id, path_rank) %>% top_n(1, wt = path)
   rank <- ncbi %>% select(id, name, rank, name_type) %>% distinct()
-
+  
   ncbi_wide <- tmp2 %>% spread(path_rank, path) %>% distinct() %>% left_join(rank)
-
-
+  
+  
   ## Get common names for each entry
   ncbi_common <- ncbi %>%
     filter(name_type == "common name") %>%
     n_in_group(group_var = "id", n = 1, wt = name) %>%
     select(id, name)
-
-
+  
+  
   ##### Rename things to Darwin Core
   dwc <- ncbi_wide %>%
     rename(taxonID = id,
@@ -162,11 +161,11 @@ node_types <- c("iiclilililllc")
            taxonomicStatus, acceptedNameUsageID,
            kingdom, phylum, class, order, family, genus,
            specificEpithet = species) %>% ungroup()
-
+  
   dwc$taxonID[dwc$taxonomicStatus  != "scientific name"] <- NA_character_
   dwc$taxonomicStatus[dwc$taxonomicStatus  == "scientific name"] <- "accepted"
-
-
+  
+  
   #Common name table
   comm_table <- dwc %>%
     filter(taxonomicStatus == "common name") %>%
@@ -176,38 +175,10 @@ node_types <- c("iiclilililllc")
     ##  so just filter for those
     filter(taxonomicStatus == "accepted") %>%
     select(vernacularName, scientificName, taxonRank, taxonID, acceptedNameUsageID, taxonomicStatus)
-
+  
   write_tsv(dwc, output_paths["dwc"])
   write_tsv(comm_table, output_paths["common"])
-
+  
   file_hash(output_paths)
-
+  
 }
-
-
-#remotes::install_github("cboettig/prov")
-
-# See ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
-# taxdump.zip is apparently the same as the old format, not the new format!
-
-#  "ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2020-09-01.zip"
-
-in_url <- "ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2019-12-01.zip"
-in_file <- file.path("/minio/shared-data/taxadb/ncbi", basename(in_url))
-curl::curl_download(in_url,  in_file)
-
-code <- c("data-raw/ncbi.R", "data-raw/helper-routines.R")
-output_paths <- c(dwc = "2020/dwc_ncbi.tsv.gz",
-                 common = "2020/common_ncbi.tsv.gz")
-
-## HERE WE GO!
-library(tidyverse)
-preprocess_ncbi(in_url, output_paths)
-
-## And publish provenance
-prov:::minio_store(c(in_file, code, output_paths), "https://minio.thelio.carlboettiger.info", dir = "/minio/")
-prov::write_prov(data_in = in_file, code = code, data_out =  unname(output_paths), prov="data-raw/prov.json", append=TRUE)
-
-
-
-

@@ -12,7 +12,7 @@ preprocess_gbif <- function(url = "http://rs.gbif.org/datasets/backbone/backbone
   dir <- file.path(tempdir(), "gbif")
   dir.create(dir, FALSE, FALSE)
   archive <- file.path(dir, "backbone.zip")
-  download.file("http://rs.gbif.org/datasets/backbone/backbone-current.zip",
+  download.file(url,
                 archive)
 
 
@@ -98,13 +98,3 @@ preprocess_gbif <- function(url = "http://rs.gbif.org/datasets/backbone/backbone
 
   file_hash(output_paths)
 }
-
-
-#preprocess_gbif(file.path(tempdir(), "gbif"),
-#                output_paths = c(dwc = "2019/dwc_gbif.tsv.bz2",
-#                                 common = "2019/common_gbif.tsv.bz2")
-#                )
-
-
-#piggyback::pb_upload("dwc_gbif.tsv.bz2", repo="boettiger-lab/taxadb-cache", tag="2019")
-#piggyback::pb_upload("common_gbif.tsv.bz2", repo="boettiger-lab/taxadb-cache", tag = "2019")

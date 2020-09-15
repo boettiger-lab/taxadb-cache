@@ -178,27 +178,3 @@ preprocess_ott <-
 }
 
 
-
-in_url <- "http://files.opentreeoflife.org/ott/ott3.2/ott3.2.tgz"
-in_file <- "/minio/shared-data/taxadb/ott/ott3.2.tgz"
-dir.create(dirname(in_file))
-curl::curl_download(in_url, in_file)
-code <- c("data-raw/ott.R","data-raw/helper-routines.R")
-output_paths = c(dwc = "2020/dwc_ott.tsv.bz2")
-
-
-source("data-raw/helper-routines.R")
-
-## HERE WE GO!
-preprocess_ott(url = in_url, output_paths)
-
-## And publish provenance
-prov:::minio_store(c(in_file, code, output_paths), "https://minio.thelio.carlboettiger.info", dir = "/minio/")
-prov::write_prov(data_in = in_file, code = code, data_out =  unname(output_paths), prov="data-raw/prov.json", append=TRUE)
-
-
-
-
-
-
-

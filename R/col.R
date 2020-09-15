@@ -108,24 +108,3 @@ preprocess_col <- function(url = paste0("http://www.catalogueoflife.org/DCA_Expo
 }
 
 
-
-
-
-in_url <- paste0("http://www.catalogueoflife.org/DCA_Export/zip-fixed/", 2020, "-annual.zip")
-in_file <- "/minio/shared-data/taxadb/ott/col-2020-annual.zip"
-dir.create(dirname(in_file))
-curl::curl_download(in_url, in_file)
-code <- c("data-raw/col.R","data-raw/helper-routines.R")
-output_paths <- c(dwc = "2020/dwc_col.tsv.bz2",
-                 common = "2020/common_col.tsv.bz2")
-
-source("data-raw/helper-routines.R")
-
-## HERE WE GO!
-preprocess_col(url = in_url, output_paths = output_paths)
-
-## And publish provenance
-prov:::minio_store(c(in_file, code, output_paths), "https://minio.thelio.carlboettiger.info", dir = "/minio/")
-prov::write_prov(data_in = in_file, code = code, data_out =  unname(output_paths), prov="data-raw/prov.json", append=TRUE)
-
-
