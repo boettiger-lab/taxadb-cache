@@ -176,6 +176,11 @@ preprocess_ncbi <- function(url,
     filter(taxonomicStatus == "accepted") %>%
     select(vernacularName, scientificName, taxonRank, taxonID, acceptedNameUsageID, taxonomicStatus)
   
+  dwc <- dwc %>% left_join(select(comm_table, acceptedNameUsageID, vernacularName))
+  
+  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
+                        scientificName = clean_names(scientificName))
+  
   write_tsv(dwc, output_paths["dwc"])
   write_tsv(comm_table, output_paths["common"])
   

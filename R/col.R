@@ -93,16 +93,21 @@ preprocess_col <- function(url = paste0("http://www.catalogueoflife.org/DCA_Expo
     select(taxonID, vernacularName)
 
   ## stri_paste respects NAs, avoids "<prefix>:NA"
-  dwc_col <-
+  dwc <-
     bind_rows(accepted, rest) %>%
     left_join(comm_names, by = "taxonID") %>%
     mutate(taxonID = stringi::stri_paste("COL:", taxonID),
            acceptedNameUsageID = stringi::stri_paste("COL:", acceptedNameUsageID))
 
 
+  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
+                        scientificName = clean_names(scientificName))
+  
+  
+  
   message("writing COL Output...\n")
 
- write_tsv(dwc_col, output_paths[["dwc"]])
+ write_tsv(dwc, output_paths[["dwc"]])
  write_tsv(comm_table, output_paths[["common"]])
 
 }

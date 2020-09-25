@@ -174,6 +174,17 @@
       "wasGeneratedAtTime": "2020-09-15 15:56:34"
     },
     {
+      "id": "hash://sha256/593fe1b0190577a89fcbecc4a730e9b635c4dbb35971291cfc1e39fc9e157a3a",
+      "type": [
+        "Distribution",
+        "SoftwareSourceCode"
+      ],
+      "description": "R code",
+      "format": "application/R",
+      "identifier": "hash://sha256/593fe1b0190577a89fcbecc4a730e9b635c4dbb35971291cfc1e39fc9e157a3a",
+      "title": "ncbi.R"
+    },
+    {
       "id": "hash://sha256/5c1b273fae0b5fc9803e564b1f9960b9e7ebbd56a0bfa5364f7feb7c6177be2b",
       "type": [
         "Distribution",
@@ -219,6 +230,17 @@
       "wasGeneratedBy": "urn:uuid:b657b11b-1bfa-4a6a-baee-c56efe183a8d"
     },
     {
+      "id": "hash://sha256/9749f5be22ccb3d8762348c83956e40b2fdc3a61d7b0bec2b8b2a826f9aed894",
+      "type": [
+        "Distribution",
+        "SoftwareSourceCode"
+      ],
+      "description": "R code",
+      "format": "application/R",
+      "identifier": "hash://sha256/9749f5be22ccb3d8762348c83956e40b2fdc3a61d7b0bec2b8b2a826f9aed894",
+      "title": "helper-routines.R"
+    },
+    {
       "id": "hash://sha256/9912ae9f4db075d73b0d23c4bc299078c16aca87cf72baabca3ec5b4ae6ab590",
       "type": "Distribution",
       "description": "output data",
@@ -258,6 +280,19 @@
       "wasGeneratedBy": "urn:uuid:b657b11b-1bfa-4a6a-baee-c56efe183a8d"
     },
     {
+      "id": "hash://sha256/b31ed646287eb2c73eaebd3fed8fd7b24b1df7eb6e5c6eb6dcf2d3a93d43536d",
+      "type": "Distribution",
+      "description": "output data",
+      "format": "application/gzip",
+      "identifier": "hash://sha256/b31ed646287eb2c73eaebd3fed8fd7b24b1df7eb6e5c6eb6dcf2d3a93d43536d",
+      "title": "dwc_ncbi.tsv.gz",
+      "byteSize": 60295958,
+      "compressFormat": "gzip",
+      "wasDerivedFrom": "hash://sha256/cb022c71e1cb96d5039d6cf784adbcb181d8381ab4b86138a651bf47c34fbd6f",
+      "wasGeneratedAtTime": "2020-09-25 16:34:30",
+      "wasGeneratedBy": "urn:uuid:64d7c017-af67-4869-afed-cf12603b60ff"
+    },
+    {
       "id": "hash://sha256/b6884a113d8aafda1b3c89e32172218c63504d65d35442bb718d8a1a62704c77",
       "type": "Distribution",
       "description": "output data",
@@ -267,8 +302,14 @@
       "byteSize": 28602683,
       "compressFormat": "gzip",
       "wasDerivedFrom": "hash://sha256/cb022c71e1cb96d5039d6cf784adbcb181d8381ab4b86138a651bf47c34fbd6f",
-      "wasGeneratedAtTime": "2020-09-14 05:03:02",
-      "wasGeneratedBy": "urn:uuid:519ea467-14e7-4c8e-955f-c63fab851ec6"
+      "wasGeneratedAtTime": [
+        "2020-09-25 16:34:30",
+        "2020-09-14 05:03:02"
+      ],
+      "wasGeneratedBy": [
+        "urn:uuid:64d7c017-af67-4869-afed-cf12603b60ff",
+        "urn:uuid:519ea467-14e7-4c8e-955f-c63fab851ec6"
+      ]
     },
     {
       "id": "hash://sha256/c6dfbc718dfc4e08e27d6f9e303f2fa5da6698cfae5a520c904420813a681425",
@@ -289,7 +330,10 @@
       "identifier": "hash://sha256/cb022c71e1cb96d5039d6cf784adbcb181d8381ab4b86138a651bf47c34fbd6f",
       "title": "taxdmp_2020-09-01.zip",
       "byteSize": 53061635,
-      "wasGeneratedAtTime": "2020-09-14 04:30:48"
+      "wasGeneratedAtTime": [
+        "2020-09-25 15:59:28",
+        "2020-09-14 04:30:48"
+      ]
     },
     {
       "id": "hash://sha256/cd1cf5f20154aaa171c8ecfa53e4486a340d540ca8bda0e8cd899cbc9275f628",
@@ -421,6 +465,22 @@
         "hash://sha256/5c1b273fae0b5fc9803e564b1f9960b9e7ebbd56a0bfa5364f7feb7c6177be2b",
         "hash://sha256/ff7607c47ef8f11e5ff0bc2a6b12e4d545a984194986305f778541d2039e0e2f",
         "hash://sha256/65efa48cfc1aa5442d6aa341f1c59582cf242f87ac81f7f152f105cde22e0530"
+      ]
+    },
+    {
+      "id": "urn:uuid:64d7c017-af67-4869-afed-cf12603b60ff",
+      "type": "Activity",
+      "description": "Running R script",
+      "generated": [
+        "hash://sha256/b31ed646287eb2c73eaebd3fed8fd7b24b1df7eb6e5c6eb6dcf2d3a93d43536d",
+        "hash://sha256/b6884a113d8aafda1b3c89e32172218c63504d65d35442bb718d8a1a62704c77"
+      ],
+      "endedAtTime": "2020-09-25 16:34:30",
+      "used": [
+        "hash://sha256/cb022c71e1cb96d5039d6cf784adbcb181d8381ab4b86138a651bf47c34fbd6f",
+        "hash://sha256/593fe1b0190577a89fcbecc4a730e9b635c4dbb35971291cfc1e39fc9e157a3a",
+        "hash://sha256/9749f5be22ccb3d8762348c83956e40b2fdc3a61d7b0bec2b8b2a826f9aed894",
+        "hash://sha256/3ae2a0dc3e230896e0c0f8eab5dfcee4e019afaf27136ea091c86c505c0d9c27"
       ]
     },
     {

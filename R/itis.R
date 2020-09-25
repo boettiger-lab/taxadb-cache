@@ -200,6 +200,11 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
               by = "acceptedNameUsageID") %>%
     distinct()
   
+  ## Sanitize characters
+  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
+                        scientificName = clean_names(scientificName))
+  
+  
   
   ## Common name table
   common <-  vern %>%

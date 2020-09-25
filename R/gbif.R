@@ -84,16 +84,20 @@ preprocess_gbif <- function(url = "http://rs.gbif.org/datasets/backbone/backbone
 
   ## stri_paste respects NAs, avoids "GBIF:NA"
   ## de-duplicate avoids cases where an accepted name is also listed as a synonym.
-  dwc_gbif <-
+  dwc <-
     bind_rows(accepted, rest) %>%
     left_join(comm_names %>% select(taxonID, vernacularName), by = "taxonID") %>%
     mutate(taxonID = stringi::stri_paste("GBIF:", taxonID),
            acceptedNameUsageID = stringi::stri_paste("GBIF:", acceptedNameUsageID))
 
 
+  
+  
+  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
+                        scientificName = clean_names(scientificName))
 
   dir.create(dirname(output_paths[["dwc"]]), FALSE)
-  write_tsv(dwc_gbif, output_paths[["dwc"]])
+  write_tsv(dwc, output_paths[["dwc"]])
   write_tsv(comm_names, output_paths[["common"]])
 
   file_hash(output_paths)

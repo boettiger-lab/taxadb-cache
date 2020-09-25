@@ -171,6 +171,9 @@ preprocess_ott <-
                                        fixed="accepted_name")
            )
 
+  
+  
+  dwc <- dwc %>% mutate(scientificName = clean_names(scientificName))
 
     write_tsv(dwc, output_paths["dwc"])
 
