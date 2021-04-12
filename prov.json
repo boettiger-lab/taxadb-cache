@@ -129,17 +129,6 @@
       "wasGeneratedBy": "urn:uuid:f21b5c88-90c9-4901-ac22-a5b79b13a1ed"
     },
     {
-      "id": "hash://sha256/25090de609b2d01bd27280bc6ff5f67db47757cca5db0306c9718e6343233ff6",
-      "type": "Distribution",
-      "description": "output data",
-      "format": "text/plain",
-      "identifier": "hash://sha256/25090de609b2d01bd27280bc6ff5f67db47757cca5db0306c9718e6343233ff6",
-      "title": "dwc_slb.tsv.bz2",
-      "byteSize": 1306165,
-      "compressFormat": "bz2",
-      "wasGeneratedAtTime": "2019-12-01"
-    },
-    {
       "id": "hash://sha256/256c9cf3e137e3b801653f818fba02f019ee94dbeb2961089dcfd2a93e1cb7b9",
       "type": [
         "Distribution",
@@ -169,17 +158,6 @@
       "identifier": "hash://sha256/2fba4f4abbbeb3a748bdc1047b59d88ebd8dddbf3cf0f3a5fcbd48c8877fed54",
       "title": "dwc_wd.tsv.bz2",
       "byteSize": 34189047,
-      "compressFormat": "bz2",
-      "wasGeneratedAtTime": "2019-12-01"
-    },
-    {
-      "id": "hash://sha256/30516362af0a394a7a78677ae129a95101cb852bda20ad872ae042ced43c463c",
-      "type": "Distribution",
-      "description": "output data",
-      "format": "text/plain",
-      "identifier": "hash://sha256/30516362af0a394a7a78677ae129a95101cb852bda20ad872ae042ced43c463c",
-      "title": "common_iucn.tsv.bz2",
-      "byteSize": 156,
       "compressFormat": "bz2",
       "wasGeneratedAtTime": "2019-12-01"
     },
@@ -294,17 +272,6 @@
       "wasDerivedFrom": "hash://sha256/5ea6fda29982057ff25aa7b2157742dcb33f65c50c0d59da1cb24cbc0ca3fc31",
       "wasGeneratedAtTime": "2020-09-14 05:34:27",
       "wasGeneratedBy": "urn:uuid:b657b11b-1bfa-4a6a-baee-c56efe183a8d"
-    },
-    {
-      "id": "hash://sha256/8ce38e4d537a1ce50f8f9b32577df29012eaf0c84eccb28c6e9eafbe0e00d190",
-      "type": "Distribution",
-      "description": "output data",
-      "format": "text/plain",
-      "identifier": "hash://sha256/8ce38e4d537a1ce50f8f9b32577df29012eaf0c84eccb28c6e9eafbe0e00d190",
-      "title": "common_slb.tsv.bz2",
-      "byteSize": 713036,
-      "compressFormat": "bz2",
-      "wasGeneratedAtTime": "2019-12-01"
     },
     {
       "id": "hash://sha256/9749f5be22ccb3d8762348c83956e40b2fdc3a61d7b0bec2b8b2a826f9aed894",
@@ -534,17 +501,6 @@
       "format": "application/R",
       "identifier": "hash://sha256/d636ec91455a617d6fbbead7dd5a21c84c76506165b37dbff5dc5ec4217de8a5",
       "title": "gbif.R"
-    },
-    {
-      "id": "hash://sha256/d91b51013b669a31fd268743cf2db866b0f3e7a7f1af78e60271fa5f137bd21e",
-      "type": "Distribution",
-      "description": "output data",
-      "format": "text/plain",
-      "identifier": "hash://sha256/d91b51013b669a31fd268743cf2db866b0f3e7a7f1af78e60271fa5f137bd21e",
-      "title": "dwc_iucn.tsv.bz2",
-      "byteSize": 2707366,
-      "compressFormat": "bz2",
-      "wasGeneratedAtTime": "2019-12-01"
     },
     {
       "id": "hash://sha256/d9ba565ef177af1eb4471d6bc82f2b270cc92bc779ce711f05bda2923d4e5518",
