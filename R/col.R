@@ -1,10 +1,4 @@
-#' @importFrom utils globalVariables
-globalVariables(c("taxonID", "scientificName", "kingdom", "phylum", "class", "order", "family", "genus", "species",
-                  "taxonConceptID", "isExtinct", "specificEpithet", "infraspecificEpithet", "nameAccordingTo",
-                  "namePublishedIn", "scientificNameAuthorship", "namePublishedIn", "vernacularName", "language",
-                  "Species", "SpecCode", "Class", "SuperClass", "Family", "Order", "Genus", "Species", "type", "TaxonLevel",
-                  "synonym", "name", "Language", "commonNames", "accepted_id", "synonym_id", "SynCode", "taxon",
-                  "taxonomicStatus", "acceptedNameUsageID"))
+
 
 #' preprocess_col
 #'
@@ -18,91 +12,138 @@ globalVariables(c("taxonID", "scientificName", "kingdom", "phylum", "class", "or
 #' @importFrom stats family setNames
 #' @importFrom utils download.file untar unzip
 #' @details NOTE: A list of  all snapshots available from: http://www.catalogueoflife.org/DCA_Export/archive.php
-preprocess_col <- function(url = paste0("http://www.catalogueoflife.org/DCA_Export/zip-fixed/",
-                                        2019,
-                                        "-annual.zip"),
-                           output_paths = c(dwc = "2019/dwc_col.tsv.bz2",
-                                            common = "2019/common_col.tsv.bz2"),
+preprocess_col <- function(url = "https://download.catalogueoflife.org/col/monthly/2021-06-10_dwca.zip",
+                           output_paths = c(dwc = "2021/dwc_col.tsv.bz2",
+                                            common = "2021/common_col.tsv.bz2"),
                            dir = file.path(tempdir(), "col")){
 
 
   dir.create(dir, FALSE, FALSE)
-  curl::curl_download(url,
-                file.path(dir, "col-annual.zip"))
-  unzip(file.path(dir, "col-annual.zip"), exdir=dir)
+  download.file(url,
+                file.path(dir, "col-2021.zip"))
+  unzip("2021/col-2021.zip", exdir=dir)
 
   ## a better read_tsv
   read_tsv <- function(...) readr::read_tsv(..., quote = "",
                                             col_types = readr::cols(.default = "c"))
 
+  taxon <- read_tsv(file.path(dir, "Taxon.tsv"))
+  
+  # no prefixes in colnames please
+  cols <- colnames(taxon)
+  barenames <- gsub("^dwc:", "", cols)
+  names(taxon) <- barenames
+  
+  ## Now the hard part.  
+  ## We use recursive tree descent by parentTaxa to determine kingdom, phylum, class, order & family. 
+  ids <- taxon %>% filter(taxonomicStatus=="accepted") %>% select(taxonID, parentNameUsageID)
+  
+  #( currently a depth of p18 and beyond lead to empty ranks...)
+  recursive_ids <- taxon %>% select(taxonID, parentNameUsageID, taxonomicStatus, taxonRank, scientificName) %>%
+    filter(taxonomicStatus=="accepted", taxonRank == "species") %>%
+    left_join(rename(ids, p2 = parentNameUsageID), by = c("parentNameUsageID" = "taxonID")) %>%
+    left_join(rename(ids, p3 = parentNameUsageID), by = c("p2" = "taxonID")) %>%
+    left_join(rename(ids, p4 = parentNameUsageID), by = c("p3" = "taxonID")) %>%
+    left_join(rename(ids, p5 = parentNameUsageID), by = c("p4" = "taxonID")) %>%
+    left_join(rename(ids, p6 = parentNameUsageID), by = c("p5" = "taxonID")) %>%
+    left_join(rename(ids, p7 = parentNameUsageID), by = c("p6" = "taxonID")) %>%
+    left_join(rename(ids, p8 = parentNameUsageID), by = c("p7" = "taxonID")) %>%
+    left_join(rename(ids, p9 = parentNameUsageID), by = c("p8" = "taxonID")) %>%
+    left_join(rename(ids, p10 = parentNameUsageID), by = c("p9" = "taxonID")) %>%
+    left_join(rename(ids, p11 = parentNameUsageID), by = c("p10" = "taxonID")) %>%
+    left_join(rename(ids, p12 = parentNameUsageID), by = c("p11" = "taxonID")) %>%
+    left_join(rename(ids, p13 = parentNameUsageID), by = c("p12" = "taxonID")) %>%
+    left_join(rename(ids, p14 = parentNameUsageID), by = c("p13" = "taxonID")) %>%
+    left_join(rename(ids, p15 = parentNameUsageID), by = c("p14" = "taxonID")) %>%
+    left_join(rename(ids, p16 = parentNameUsageID), by = c("p15" = "taxonID")) %>%
+    left_join(rename(ids, p17 = parentNameUsageID), by = c("p16" = "taxonID")) %>%
+    left_join(rename(ids, p18 = parentNameUsageID), by = c("p17" = "taxonID")) %>%
+    left_join(rename(ids, p19 = parentNameUsageID), by = c("p18" = "taxonID")) %>%
+    left_join(rename(ids, p20 = parentNameUsageID), by = c("p19" = "taxonID"))
+  
+  # We will only provide hierarchy terms for `taxonRank==species`, taxonomicStatus=="accepted"
 
-  taxon <- read_tsv(file.path(dir, "taxa.txt"))
-  reference <- read_tsv(file.path(dir, "reference.txt"))
+  ## Unpacking the recursive ID map requires two pivots -- memory-intensive operations!  
+  long_hierarchy <-
+    recursive_ids %>%
+    tidyr::pivot_longer(starts_with("p"), names_to = "dummy", values_to = "path_id")
+  
+  ## Now we get accepted ranks:
+  ranks <- taxon %>%
+    filter(taxonomicStatus == "accepted") %>%
+    select(taxonID, taxonRank, scientificName) %>%
+    ## even many higher rank names include the authority strings on the name, making string-matching impossible
+    mutate(scientificName = stringi::stri_extract_first_words(scientificName))
+  ## and here we go; this is slow...
+  wide <- long_hierarchy %>% 
+    select(id = "taxonID", path_id) %>%
+    distinct() %>%  
+    left_join(ranks, by = c(path_id = "taxonID")) %>%
+    filter(taxonRank %in% c("genus", "family", "order", "class", "phylum", "kingdom")) %>%
+    select(-path_id) %>%    # count(id, taxonRank) %>% filter(n>1) # shows duplicates
+    group_by(id, taxonRank) %>% slice_head(n=1) %>% # avoid duplicate 'family'. #slow 
+    pivot_wider(names_from = taxonRank, values_from = scientificName)  # very slow
+  
+  # test that we have no spaces in names
+  # sapply(wide, function(str) sum(grepl(" ",str)))
+  
+  ## Now we have the higher classification for all accepted scientific names, we can join it to the 
+  ## the core table:
+  taxon <- left_join(taxon, wide, by = c("taxonID" = "id"))
+  
+  ## Most scientificName strings for `species` are the genus+specificEpithet+authority
+  ## As usual, authority abbreviations are wildly non-standard, preventing most string matching.
+  ## We replace them with "genus species"
+  
+  taxon <- taxon %>% 
+    filter(taxonRank=="species") %>% 
+    mutate(
+      scientificName = case_when(
+        taxonRank == "species" ~ paste(genus, specificEpithet), # when taxonRank == species, sci name is binomial 
+        !is.na(infraspecificEpithet) ~ infraspecificEpithet     # when infraspecificEpithet is provided, rank is some flavor of subspecies
+        )
+      )
 
-  ## scientificNameAuthorship tagged on to scientificName, and in inconsistent format. trim it off.
-  taxa_tmp <- taxon %>%
-    mutate(taxonomicStatus = forcats::fct_recode(taxonomicStatus, "accepted" = "accepted name")) %>%
-    select(taxonID, scientificName, acceptedNameUsageID, taxonomicStatus, taxonRank,
-           kingdom, phylum, class, order, family, genus, specificEpithet, infraspecificEpithet,
-           taxonConceptID, isExtinct, nameAccordingTo, namePublishedIn, scientificNameAuthorship)
-  taxa <- bind_rows(
-    taxa_tmp %>%
-      filter(!is.na(scientificNameAuthorship)) %>%
-      mutate(scientificName =
-             stri_trim(stri_replace_first_fixed(scientificName, scientificNameAuthorship, ""))),
-    taxa_tmp %>%
-      filter(is.na(scientificNameAuthorship))
-  )
+  ## if taxonomicStatus is accepted, set acceptedNameUsageID = taxonID (not NA)
+    taxon <- taxon %>% 
+      mutate(
+        acceptedNameUsageID = case_when(
+          taxonomicStatus %in% c("accepted", "provisionally accepted") ~ taxonID
+        )
+      )
 
-  ## For accepted names, set acceptedNameUsageID to match taxonID, rather NA
-  accepted <-
-    filter(taxa, taxonomicStatus %in% c("accepted", "provisionally accepted name")) %>%
-    mutate(acceptedNameUsageID = taxonID)
-
-  accepted_heirarchy <- select(accepted, -acceptedNameUsageID, -scientificName, -taxonomicStatus)
-  rest <-
-    filter(taxa, taxonomicStatus != "accepted") %>%
-    filter(!is.na(acceptedNameUsageID)) %>%
-    select(taxonID, scientificName, acceptedNameUsageID, taxonomicStatus) %>%
-    left_join(accepted_heirarchy, by = c("acceptedNameUsageID" = "taxonID"))
-
-
-  # We drop un-mapped synonyms, as they are not helpful
-
-  vernacular <- read_tsv(file.path(dir, "vernacular.txt"))
+  taxon <- taxon %>% select(taxonID, acceptedNameUsageID, taxonomicStatus,taxonRank, scientificName,
+                   kingdom, phylum, class, order, family, genus, specificEpithet, infraspecificEpithet,
+                   namePublishedIn, nameAccordingTo, taxonRemarks)
+    
+  vernacular <- read_tsv(file.path(dir, "VernacularName.tsv"))
+  # no prefixes in colnames please
+  cols <- colnames(vernacular)
+  barenames <- gsub("^\\w+:", "", cols)
+  names(vernacular) <- barenames
   #First we create the separate common names table
   comm_table <- vernacular %>%
-    select(taxonID, vernacularName, language) %>%
     inner_join(bind_rows(accepted), by = "taxonID") %>%
     mutate(taxonID = stringi::stri_paste("COL:", taxonID),
            acceptedNameUsageID = stringi::stri_paste("COL:", acceptedNameUsageID)
            )
 
-  # Also add a common name to the master dwc table
-  # first english names,
-  # #why doesn't this return a unique list of taxonID without distinct()??
   comm_eng <- vernacular %>%
-    filter(language == "English") %>%
-    n_in_group(group_var = "taxonID", n = 1, wt = vernacularName)
+    filter(language == "eng") %>%
+    group_by(taxonID) %>% 
+    slice_head(n=1) %>% 
+    mutate(vernacularName = tolower(vernacularName)) # Current case use very inconsistent
 
-  #get the rest
-  comm_names <- vernacular %>%
-    filter(!taxonID %in% comm_eng$taxonID) %>%
-    n_in_group(group_var = "taxonID", n = 1, wt = vernacularName) %>%
-    bind_rows(comm_eng)  %>%
-    select(taxonID, vernacularName)
-
+  
   ## stri_paste respects NAs, avoids "<prefix>:NA"
-  dwc <-
-    bind_rows(accepted, rest) %>%
-    left_join(comm_names, by = "taxonID") %>%
+  dwc <- taxon %>%
+    left_join(comm_eng, by = "taxonID") %>%
     mutate(taxonID = stringi::stri_paste("COL:", taxonID),
            acceptedNameUsageID = stringi::stri_paste("COL:", acceptedNameUsageID))
 
 
-  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
-                        scientificName = clean_names(scientificName))
-  
+  #tmp <- dwc %>% mutate(vernacularName_clean = taxadb:::clean_names(vernacularName, lowercase = FALSE),
+  #                      scientificName_clean = taxadb:::clean_names(scientificName, lowercase = FALSE))
   
   
   message("writing COL Output...\n")
@@ -110,6 +151,9 @@ preprocess_col <- function(url = paste0("http://www.catalogueoflife.org/DCA_Expo
  write_tsv(dwc, output_paths[["dwc"]])
  write_tsv(comm_table, output_paths[["common"]])
 
+# arrow::write_parquet(dwc, "2021/dwc_col.parquet")
+# arrow::write_parquet(dwc, "2021/common_col.parquet")
+ 
 }
 
 

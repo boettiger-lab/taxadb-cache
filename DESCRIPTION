@@ -32,7 +32,9 @@ Imports:
     tidyr,
     rlang,
     rfishbase,
-    stringr
+    stringr,
+    aws.s3,
+    prov
 Suggests:
     spelling,
     testthat,
@@ -43,3 +45,4 @@ VignetteBuilder: knitr
 URL: https://github.com/boettiger-lab/taxadb-cache
 BugReports: https://github.com/boettiger-lab/taxadb-cache/issues
 RoxygenNote: 7.0.2
+Remotes: cboettig/prov
