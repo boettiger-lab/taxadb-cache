@@ -415,6 +415,19 @@
       "wasGeneratedBy": "urn:uuid:b657b11b-1bfa-4a6a-baee-c56efe183a8d"
     },
     {
+      "id": "hash://sha256/95cfbe83ee254714c5fdaf413daa0a43a80b7de96f087f5072747b6378e98811",
+      "type": "Distribution",
+      "description": "output data",
+      "format": "text/plain",
+      "identifier": "hash://sha256/95cfbe83ee254714c5fdaf413daa0a43a80b7de96f087f5072747b6378e98811",
+      "title": "dwc_col.tsv.bz2",
+      "byteSize": 125969223,
+      "compressFormat": "bz2",
+      "wasDerivedFrom": "hash://sha256/bb61eb6db2a975bc4bc555b37cf991973221730ae1db88197f12f112b6fb3fc8",
+      "wasGeneratedAtTime": "2021-09-01 22:02:56",
+      "wasGeneratedBy": "urn:uuid:9b985785-ead0-471b-8812-d70a55020be8"
+    },
+    {
       "id": "hash://sha256/9749f5be22ccb3d8762348c83956e40b2fdc3a61d7b0bec2b8b2a826f9aed894",
       "type": [
         "Distribution",
@@ -546,6 +559,17 @@
       "wasGeneratedAtTime": "2019-12-01"
     },
     {
+      "id": "hash://sha256/b5cab8a937fa3cb805641951aa255116ea8db236419aec9097ec186a4c7a2221",
+      "type": [
+        "Distribution",
+        "SoftwareSourceCode"
+      ],
+      "description": "R code",
+      "format": "application/R",
+      "identifier": "hash://sha256/b5cab8a937fa3cb805641951aa255116ea8db236419aec9097ec186a4c7a2221",
+      "title": "col.R"
+    },
+    {
       "id": "hash://sha256/b6884a113d8aafda1b3c89e32172218c63504d65d35442bb718d8a1a62704c77",
       "type": "Distribution",
       "description": "output data",
@@ -574,6 +598,16 @@
       "byteSize": 2692382,
       "compressFormat": "bz2",
       "wasGeneratedAtTime": "2019-12-01"
+    },
+    {
+      "id": "hash://sha256/bb61eb6db2a975bc4bc555b37cf991973221730ae1db88197f12f112b6fb3fc8",
+      "type": "Distribution",
+      "description": "Input data",
+      "format": "application/zip",
+      "identifier": "hash://sha256/bb61eb6db2a975bc4bc555b37cf991973221730ae1db88197f12f112b6fb3fc8",
+      "title": "col-2021.zip",
+      "byteSize": 266712668,
+      "wasGeneratedAtTime": "2021-08-08 05:16:07"
     },
     {
       "id": "hash://sha256/bc63094c83d8dfa4bffa2c9d0487ff1a95952ad7e8a6eb252fb93e4f1e590fcb",
@@ -721,6 +755,19 @@
       "title": "ott3.2.tgz",
       "byteSize": 118923248,
       "wasGeneratedAtTime": "2020-09-14 05:34:40"
+    },
+    {
+      "id": "hash://sha256/eb66d3d3f8e697c637b26e6ebf14e9dbb4a9bda1950819fc1f357c76208fd3d3",
+      "type": "Distribution",
+      "description": "output data",
+      "format": "text/plain",
+      "identifier": "hash://sha256/eb66d3d3f8e697c637b26e6ebf14e9dbb4a9bda1950819fc1f357c76208fd3d3",
+      "title": "common_col.tsv.bz2",
+      "byteSize": 5705906,
+      "compressFormat": "bz2",
+      "wasDerivedFrom": "hash://sha256/bb61eb6db2a975bc4bc555b37cf991973221730ae1db88197f12f112b6fb3fc8",
+      "wasGeneratedAtTime": "2021-09-01 22:02:56",
+      "wasGeneratedBy": "urn:uuid:9b985785-ead0-471b-8812-d70a55020be8"
     },
     {
       "id": "hash://sha256/ed9b0985e8df0d416ec724edbe523c58b4e608706026124875442b1f42bc1d41",
@@ -898,6 +945,22 @@
         "hash://sha256/f6afbcdd9f2e50ca0767b92c51c5e061e3abc3881e914792c2035bdef0f393c8",
         "hash://sha256/9749f5be22ccb3d8762348c83956e40b2fdc3a61d7b0bec2b8b2a826f9aed894",
         "hash://sha256/7d01315f855e27ac33113403a788cd5169d16964f467aa85f507c45b27643653"
+      ]
+    },
+    {
+      "id": "urn:uuid:9b985785-ead0-471b-8812-d70a55020be8",
+      "type": "Activity",
+      "description": "Running R script",
+      "endedAtTime": "2021-09-01 22:02:56",
+      "generated": [
+        "hash://sha256/95cfbe83ee254714c5fdaf413daa0a43a80b7de96f087f5072747b6378e98811",
+        "hash://sha256/eb66d3d3f8e697c637b26e6ebf14e9dbb4a9bda1950819fc1f357c76208fd3d3"
+      ],
+      "used": [
+        "hash://sha256/bb61eb6db2a975bc4bc555b37cf991973221730ae1db88197f12f112b6fb3fc8",
+        "hash://sha256/b5cab8a937fa3cb805641951aa255116ea8db236419aec9097ec186a4c7a2221",
+        "hash://sha256/9749f5be22ccb3d8762348c83956e40b2fdc3a61d7b0bec2b8b2a826f9aed894",
+        "hash://sha256/318038e158ca69d50448025ba7c1848705e7776f55f40e8056bb4c1e94ccac1a"
       ]
     },
     {

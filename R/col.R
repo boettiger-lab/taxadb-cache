@@ -123,7 +123,7 @@ preprocess_col <- function(url = "https://download.catalogueoflife.org/col/month
   names(vernacular) <- barenames
   #First we create the separate common names table
   comm_table <- vernacular %>%
-    inner_join(bind_rows(accepted), by = "taxonID") %>%
+    inner_join(bind_rows(filter(taxon, taxonomicStatus=="accepted")), by = "taxonID") %>%
     mutate(taxonID = stringi::stri_paste("COL:", taxonID),
            acceptedNameUsageID = stringi::stri_paste("COL:", acceptedNameUsageID)
            )
@@ -150,9 +150,9 @@ preprocess_col <- function(url = "https://download.catalogueoflife.org/col/month
 
  write_tsv(dwc, output_paths[["dwc"]])
  write_tsv(comm_table, output_paths[["common"]])
-
-# arrow::write_parquet(dwc, "2021/dwc_col.parquet")
-# arrow::write_parquet(dwc, "2021/common_col.parquet")
+ 
+ arrow::write_parquet(dwc, "2021/dwc_col.parquet")
+ arrow::write_parquet(comm_table, "2021/common_col.parquet")
  
 }
 
