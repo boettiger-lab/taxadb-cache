@@ -7,8 +7,8 @@
 #' @import arkdb RSQLite DBI readr dplyr stringr
 preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip",
                             output_paths =
-                              c(dwc = "2020/dwc_itis.tsv.bz2",
-                                common = "2020/common_itis.tsv.bz2")
+                              c(dwc = "2021/dwc_itis.tsv.bz2",
+                                common = "2021/common_itis.tsv.bz2")
 ){
 
   archive <- file.path(tempdir(), "itis",  "itisSqlite.zip")
@@ -17,18 +17,22 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
   download.file(url, archive)
   message(paste(file_hash(archive)))
 
-  unzip(archive, exdir=dir)
-  dbname <- list.files(list.dirs(dir, recursive=FALSE), pattern="[.]sqlite", full.names = TRUE)
+  archive::archive_extract(archive, dir)
+  
+  
+  
+  dbname <- fs::dir_ls(".", recurse = TRUE, regexp = "[.]sqlite") 
   db <- DBI::dbConnect(RSQLite::SQLite(), dbname = dbname)
-  arkdb::ark(db, dir, arkdb::streamable_readr_tsv(), lines = 1e6L, overwrite = TRUE)
 
-  ## defaulting to logicals is so annoying!
-  read_tsv <- function(...) readr::read_tsv(..., quote = "", col_types = readr::cols(.default = "c"))
-
-
-  ## not that rank_id isn't a unique id by itself!
-  rank_tbl <-
-    read_tsv(file.path(dir, "taxon_unit_types.tsv.bz2")) %>%
+  taxon_unit_type <- tbl(db, "taxon_unit_types")
+  taxonomic_units <-  tbl(db, "taxonomic_units")
+  hierarchy <- tbl(db, "hierarchy")
+  vernaculars <- tbl(db, "vernaculars")
+  synonym_links <- tbl(db, "synonym_links")
+  
+  ## note that rank_id isn't a unique id by itself!
+  rank_tbl <- 
+    taxon_unit_type %>%
     select(kingdom_id, rank_id, rank_name) %>%
     collect() %>%
     unite(rank_id, -rank_name, sep = "-") %>%
@@ -37,34 +41,34 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
               stringr::str_to_lower(rank_name),"\\s"))
 
   hierarch <-
-    read_tsv(file.path(dir, "taxonomic_units.tsv.bz2")) %>%
+    taxonomic_units %>%
     mutate(rank_id = paste(kingdom_id, rank_id, sep="-")) %>%
     select(tsn, parent_tsn, rank_id, complete_name) %>% distinct()
 
   itis <-
     left_join(
       inner_join(hierarch, rank_tbl, copy = TRUE),
-      read_tsv(file.path(dir, "hierarchy.tsv.bz2")) %>%
+      hierarchy %>%
         select(tsn = TSN, parent_tsn = Parent_TSN, hierarchy_string)
     ) %>%
-    arrange(tsn) %>%
     select(tsn, complete_name, rank_name,
            rank_id, parent_tsn, hierarchy_string) %>%
     left_join(
-              select(read_tsv(file.path(dir, "vernaculars.tsv.bz2")),
+              select(vernaculars,
                      tsn, vernacular_name, language))  %>%
    left_join(
-              select(read_tsv(file.path(dir, "taxonomic_units.tsv.bz2")),
+              select(taxonomic_units,
                     tsn, update_date, name_usage)
     ) %>%
     rename(id = tsn,
            parent_id = parent_tsn,
            common_name = vernacular_name,
            name = complete_name,
-           rank = rank_name)  %>%
-    mutate(id = stri_paste("ITIS:", id),
-           rank_id = stri_paste("ITIS:", rank_id),
-           parent_id = stri_paste("ITIS:", parent_id))
+           rank = rank_name)  %>% 
+    collect() %>%
+    mutate(id = stringi::stri_paste("ITIS:", id),
+           rank_id = stringi::stri_paste("ITIS:", rank_id),
+           parent_id = stringi::stri_paste("ITIS:", parent_id))
 
 
   ## transforms we do in R
@@ -96,7 +100,7 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
     x
   }
 
-  itis_long <- itis %>%
+  itis_long <- itis %>% collect() %>%
     purrr::transpose() %>%
     map_dfr(longform) %>%
     left_join(hier_expand, by = c("path_id" = "id")) %>%
@@ -106,17 +110,14 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
     mutate(update_date = as.Date(update_date))
 
 
-
   ## Wide-format classification table (scientific names only)
   itis_hierarchy <-
     itis_long %>%
-    filter(rank == "species", name_usage == "valid") %>%
+    filter(rank == "species", name_usage %in% c("valid", "accepted")) %>%
     select(id, species = name, path, path_rank) %>%
     distinct() %>%
     spread(path_rank, path)
 
-
-  ####
   ## accepted == valid
   ### https://www.itis.gov/submit_guidlines.html#usage
 
@@ -137,10 +138,10 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
   ## A single name column which contains both synonyms and accepted names
   ## Useful for matching since we usually don't know what we have.
   itis_taxonid <-
-    read_tsv(file.path(dir, "synonym_links.tsv.bz2")) %>%
+    synonym_links %>% collect() %>%
     rename(id = tsn, accepted_id = tsn_accepted) %>%
-    mutate(id = stri_paste("ITIS:", id),
-           accepted_id = stri_paste("ITIS:", accepted_id)) %>%
+    mutate(id = stringi::stri_paste("ITIS:", id),
+           accepted_id = stringi::stri_paste("ITIS:", accepted_id)) %>%
     select(-update_date) %>%
     right_join(synonyms, by = "id") %>%
     bind_rows(accepted) %>%
@@ -167,11 +168,9 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
   dwc_core$specificEpithet <- species[,2]
   dwc_core$infraspecificEpithet <- species[,3]
 
-
-
   # get common names #
-  vern <- read_tsv(file.path(dir, "vernaculars.tsv.bz2")) %>%
-    mutate(acceptedNameUsageID = stri_paste("ITIS:", tsn)) %>%
+  vern <- vernaculars %>% collect() %>%
+    mutate(acceptedNameUsageID = stringi::stri_paste("ITIS:", tsn)) %>%
     select(-tsn)
 
   #first the ones with accepted common names
@@ -214,8 +213,12 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
 
 
   dir.create(dirname(output_paths["dwc"]), FALSE)
-  write_tsv(dwc, output_paths["dwc"])
-  write_tsv(common, output_paths["common"])
+  
+  write_tsv(dwc, "data/dwc_itis.tsv.gz")
+  write_tsv(common, "data/common_itis.tsv.gz")
+  
+  #write_tsv(dwc, output_paths["dwc"])
+  #write_tsv(common, output_paths["common"])
 
 #  file_hash(output_paths)
 
