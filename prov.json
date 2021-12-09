@@ -94,6 +94,17 @@
       "identifier": "hash://sha256/0729934ab69a476a0d6be0b3954e2ebdbd76662df198ac7c002e8cd4b7628864",
       "title": "make.R"
     },
+     {
+      "id": "hash://sha256/d91b51013b669a31fd268743cf2db866b0f3e7a7f1af78e60271fa5f137bd21e",
+      "type": "Distribution",
+      "description": "output data",
+      "format": "text/plain",
+      "identifier": "hash://sha256/d91b51013b669a31fd268743cf2db866b0f3e7a7f1af78e60271fa5f137bd21e",
+      "title": "dwc_iucn.tsv.bz2",
+      "byteSize": 2707366,
+      "compressFormat": "bz2",
+      "wasGeneratedAtTime": "2019-12-01"
+    },
     {
       "id": "hash://sha256/0d0a61f8122f1a13cb1fcdb8e13065f5d95071873c84639cc2e39fa131ce99e6",
       "type": "Distribution",
