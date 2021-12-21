@@ -30,14 +30,13 @@ redlist <- function(){
     Hmisc::capitalize(str_to_lower(x))
     #gsub("(. )([A-Z])(.+)", "\\1\\U\\2\\L\\3", x)
   }
-  hierarchy <- full %>% select(taxonId = taxonid, kingdom = kingdom_name, phylum = phylum_name,
+  dwc <- full %>% select(taxonId = taxonid, kingdom = kingdom_name, phylum = phylum_name,
                                class = class_name, order = order_name, family = family_name,
-                               genus = genus_name, specificEpithet = spcies, 
+                               genus = genus_name, specificEpithet = species_name, 
                                scientificName = scientific_name) %>%
     mutate_if(is.character, sentence_case) %>%
     mutate(id = paste0("IUCN:", id))
   
-  dir.create("data", FALSE)
-  write_tsv(hierarchy, "dwc_iucn.tsv.gz")
+  dwc
 
 }

@@ -3,26 +3,25 @@ library(prov)
 library(tidyverse)
 library(Hmisc)
 devtools::load_all()
-
-dir.create("2021")
-rm(list=ls())
-
 in_url <- "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2021-12-01.zip"
 
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
 # so that in_file has a human-readable name
-in_file <- fs::link_create(in_file, file.path("jobs/data", basename(in_url)))
+path <- file.path("data", basename(in_url))
+if(!link_exists(path)){
+  path <- fs::link_create(in_file, path)
+}
 
 output_paths <- c("data/dwc_ncbi.tsv.gz",
                   "data/common_ncbi.tsv.gz",
                   "data/dwc_ncbi.parquet",
                   "data/common_ncbi.parquet")
 
-preprocess_ncbi(in_file, output_paths)
+preprocess_ncbi(path, output_paths)
 
 code <- c("R/ncbi.R", "R/helper-routines.R", "jobs/ncbi.R")
-prov::write_prov(data_in = in_file, 
+prov::write_prov(data_in = path, 
                  #code = code,
                  data_out =  unname(output_paths),
                  title = "NCBI Taxonomic Names",

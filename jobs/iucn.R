@@ -4,6 +4,6 @@ library(tidyverse)
 library(Hmisc)
 devtools::load_all()
 
-dir.create("2021")
 
-redlist()
+dwc <- redlist()
+write_csv(dwc, "data/dwc_iucn.tsv.gz")

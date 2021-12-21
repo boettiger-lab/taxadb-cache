@@ -7,7 +7,10 @@ devtools::load_all()
 in_url <-  "https://itis.gov/downloads/itisSqlite.zip"
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
-in_file <- fs::link_create(in_file, file.path("data", basename(in_url)))
+path <- file.path("data", basename(in_url))
+if(!link_exists(path))
+  path <- fs::link_create(in_file, path)
+
 
 output_paths = c(dwc = "data/dwc_itis.tsv.gz",
                  common = "data/common_itis.tsv.gz",
@@ -15,18 +18,19 @@ output_paths = c(dwc = "data/dwc_itis.tsv.gz",
                  common_parquet = "data/common_itis.parquet"
 )
 
-preprocess_itis(in_file, output_paths)
+preprocess_itis(path, output_paths)
 
 ## And publish provenance
 
 code <- c("R/itis.R","R/helper-routines.R", "jobs/itis.R")
-prov::write_prov(data_in = in_file,
-                 #code = code, 
+prov::write_prov(data_in = path,
+                 code = code, 
                  data_out =  unname(output_paths),
                  title = "Integrated Taxonomic Information System (ITIS)",
                  description = "Darwin Core formatted version of ITIS Taxonomy, created by rOpenSci",
                  license = "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
-                 creator = list("type" = "Organization", name = "ITIS",
+                 creator = list("type" = "Organization", 
+                                name = "ITIS",
                                 url = "https://itis.gov/",
                                 id = "https://itis.gov/"),
                  identifier = "https://doi.org/10.5066/F7KH0KBK",
@@ -36,3 +40,5 @@ prov::write_prov(data_in = in_file,
                  prov="schema.json",
                  append=TRUE, 
                  schema="http://schema.org")
+
+
