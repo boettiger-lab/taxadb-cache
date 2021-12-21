@@ -25,3 +25,5 @@
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^\.github/workflows/R-CMD-check\.yaml$
+^data$
+

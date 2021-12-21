@@ -1,0 +1,173 @@
+{
+  "@context": "http://schema.org/",
+  "@graph": [
+    {
+      "id": "urn:uuid:2aac71f4-068c-4c75-b6e5-ca99f18c9030",
+      "type": "Dataset",
+      "creator": {
+        "id": "https://www.gbif.org"
+      },
+      "description": "Darwin Core formatted version of GBIF Taxonomy, created by rOpenSci",
+      "distribution": [
+        {
+          "id": "hash://sha256/1dfd8106e82d4cf270ac262cdf13d814002985523c44173c1e5026ce81065654",
+          "type": "DataDownload",
+          "contentSize": 882307622,
+          "dateCreated": "2021-12-18",
+          "description": "Input data",
+          "encodingFormat": "application/zip",
+          "identifier": "hash://sha256/1dfd8106e82d4cf270ac262cdf13d814002985523c44173c1e5026ce81065654",
+          "name": "backbone.zip"
+        },
+        {
+          "id": "hash://sha256/e91399e82bcb21e35289be93ef614b15327d5c813cc4b8619b43c0044eba8ad8",
+          "type": "DataDownload",
+          "contentSize": 233166155,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "text/tab-separated-values",
+          "identifier": "hash://sha256/e91399e82bcb21e35289be93ef614b15327d5c813cc4b8619b43c0044eba8ad8",
+          "name": "dwc_gbif.tsv.gz"
+        },
+        {
+          "id": "hash://sha256/6ce52494bf5d6b557cb385f04cbb9417fc94066bae5172aba5635886e8f2f9d2",
+          "type": "DataDownload",
+          "contentSize": 10545228,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "text/tab-separated-values",
+          "identifier": "hash://sha256/6ce52494bf5d6b557cb385f04cbb9417fc94066bae5172aba5635886e8f2f9d2",
+          "name": "common_gbif.tsv.gz"
+        }
+      ],
+      "identifier": "https://doi.org/10.15468/39omei",
+      "issued": "2021-11-26",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "name": "GBIF Taxonomic Name Backbone",
+      "url": {
+        "id": "https://www.gbif.org",
+        "type": "Organization",
+        "name": "GBIF",
+        "url": "https://www.gbif.org"
+      },
+      "version": "21.12"
+    },
+    {
+      "id": "urn:uuid:4a8f54f6-a19b-47dd-97ad-256580081f36",
+      "type": "Dataset",
+      "creator": {
+        "id": "https://www.ncbi.nlm.nih.gov",
+        "type": "Organization",
+        "name": "NCBI",
+        "url": "https://www.ncbi.nlm.nih.gov"
+      },
+      "description": "Darwin Core formatted version of NCBI Taxonomy, created by rOpenSci",
+      "distribution": [
+        {
+          "id": "hash://sha256/4cb3c1592d5192fe8afccf6b33158eb9842353b9ef8c9155bde22032beb57438",
+          "type": "DataDownload",
+          "contentSize": 56750879,
+          "dateCreated": "2021-12-17",
+          "description": "Input data",
+          "encodingFormat": "application/zip",
+          "identifier": "hash://sha256/4cb3c1592d5192fe8afccf6b33158eb9842353b9ef8c9155bde22032beb57438",
+          "name": "taxdmp_2021-12-01.zip"
+        },
+        {
+          "id": "hash://sha256/aeaa3d49d26884892aeeb2e4dfaac0b0708f8b15eefd17b73c5232b3d43b5e66",
+          "type": "DataDownload",
+          "contentSize": 65145756,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "text/tab-separated-values",
+          "identifier": "hash://sha256/aeaa3d49d26884892aeeb2e4dfaac0b0708f8b15eefd17b73c5232b3d43b5e66",
+          "name": "dwc_ncbi.tsv.gz"
+        },
+        {
+          "id": "hash://sha256/2156966608fdf9e3cb0218af387466cf7bdf16f8f8d02d4399ccaea9d340686e",
+          "type": "DataDownload",
+          "contentSize": 30174892,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "text/tab-separated-values",
+          "identifier": "hash://sha256/2156966608fdf9e3cb0218af387466cf7bdf16f8f8d02d4399ccaea9d340686e",
+          "name": "common_ncbi.tsv.gz"
+        }
+      ],
+      "issued": "2021-12-01",
+      "license": "/Public Domain",
+      "name": "NCBI Taxonomic Names",
+      "url": "https://www.ncbi.nlm.nih.gov/taxonomy",
+      "version": "21.12"
+    },
+    {
+      "id": "urn:uuid:d81b0e11-a776-46af-a41b-d24e32a4a7a9",
+      "type": "Dataset",
+      "creator": {
+        "id": "https://itis.gov/",
+        "type": "Organization",
+        "name": "ITIS",
+        "url": "https://itis.gov/"
+      },
+      "description": "Darwin Core formatted version of ITIS Taxonomy, created by rOpenSci",
+      "distribution": [
+        {
+          "id": "hash://sha256/3040f1cbfffa66caed161c519498c0eebda2f1a72c82b209bddedd02a7e02064",
+          "type": "DataDownload",
+          "contentSize": 189365418,
+          "dateCreated": "2021-12-18",
+          "description": "Input data",
+          "encodingFormat": "application/zip",
+          "identifier": "hash://sha256/3040f1cbfffa66caed161c519498c0eebda2f1a72c82b209bddedd02a7e02064",
+          "name": "itisSqlite.zip"
+        },
+        {
+          "id": "hash://sha256/c47bf2e4dfdcb99199b7d8edb8994fea73fd9244027e1c8153c63453cc75687b",
+          "type": "DataDownload",
+          "contentSize": 16082349,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "text/tab-separated-values",
+          "identifier": "hash://sha256/c47bf2e4dfdcb99199b7d8edb8994fea73fd9244027e1c8153c63453cc75687b",
+          "name": "dwc_itis.tsv.gz"
+        },
+        {
+          "id": "hash://sha256/22b5f8cf4d7d4f42bb2d03bd4383c63c0e9a8e6e5d7d1aaf4f880ff0753f7394",
+          "type": "DataDownload",
+          "contentSize": 3850496,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "text/tab-separated-values",
+          "identifier": "hash://sha256/22b5f8cf4d7d4f42bb2d03bd4383c63c0e9a8e6e5d7d1aaf4f880ff0753f7394",
+          "name": "common_itis.tsv.gz"
+        },
+        {
+          "id": "hash://sha256/ed5e080c28a6b22565f3368e8f5787d9cb731e132a695a71c20fef8323b364bf",
+          "type": "DataDownload",
+          "contentSize": 25774311,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "application/vnd.apache.parquet",
+          "identifier": "hash://sha256/ed5e080c28a6b22565f3368e8f5787d9cb731e132a695a71c20fef8323b364bf",
+          "name": "dwc_itis.parquet"
+        },
+        {
+          "id": "hash://sha256/35ba6ec38efa95845adab29f566cd2e77b5028e6bb99334b79e22a9a346e8a0f",
+          "type": "DataDownload",
+          "contentSize": 6714440,
+          "dateCreated": "2021-12-18",
+          "description": "output data",
+          "encodingFormat": "application/vnd.apache.parquet",
+          "identifier": "hash://sha256/35ba6ec38efa95845adab29f566cd2e77b5028e6bb99334b79e22a9a346e8a0f",
+          "name": "common_itis.parquet"
+        }
+      ],
+      "identifier": "https://doi.org/10.5066/F7KH0KBK",
+      "issued": "2021-12-18",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+      "name": "Integrated Taxonomic Information System (ITIS)",
+      "url": "https://itis.gov",
+      "version": "21.12"
+    }
+  ]
+}

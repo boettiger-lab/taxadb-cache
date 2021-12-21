@@ -5,23 +5,20 @@
 #' @inheritParams preprocess_col
 #' @export
 #' @import arkdb RSQLite DBI readr dplyr stringr
-preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip",
+preprocess_itis <- function(archive,
                             output_paths =
                               c(dwc = "2021/dwc_itis.tsv.bz2",
                                 common = "2021/common_itis.tsv.bz2")
 ){
 
-  archive <- file.path(tempdir(), "itis",  "itisSqlite.zip")
-  dir <- dirname(archive)
+  dir <- file.path(tempdir(), "itis")
   dir.create(dir, FALSE, FALSE)
-  download.file(url, archive)
-  message(paste(file_hash(archive)))
-
+  
   archive::archive_extract(archive, dir)
   
   
   
-  dbname <- fs::dir_ls(".", recurse = TRUE, regexp = "[.]sqlite") 
+  dbname <- fs::dir_ls(dir, recurse = TRUE, regexp = "[.]sqlite") 
   db <- DBI::dbConnect(RSQLite::SQLite(), dbname = dbname)
 
   taxon_unit_type <- tbl(db, "taxon_unit_types")
@@ -31,6 +28,9 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
   synonym_links <- tbl(db, "synonym_links")
   
   ## note that rank_id isn't a unique id by itself!
+  
+  ### FIXME rank information missing for plants and fungi!
+  
   rank_tbl <- 
     taxon_unit_type %>%
     select(kingdom_id, rank_id, rank_name) %>%
@@ -116,7 +116,7 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
     filter(rank == "species", name_usage %in% c("valid", "accepted")) %>%
     select(id, species = name, path, path_rank) %>%
     distinct() %>%
-    spread(path_rank, path)
+    tidyr::spread(path_rank, path)
 
   ## accepted == valid
   ### https://www.itis.gov/submit_guidlines.html#usage
@@ -200,8 +200,8 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
     distinct()
   
   ## Sanitize characters
-  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
-                        scientificName = clean_names(scientificName))
+  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
+                        scientificName = clean_names(scientificName, lowercase=FALSE))
   
   
   
@@ -216,6 +216,9 @@ preprocess_itis <- function(url = "https://www.itis.gov/downloads/itisSqlite.zip
   
   write_tsv(dwc, "data/dwc_itis.tsv.gz")
   write_tsv(common, "data/common_itis.tsv.gz")
+  
+  arrow::write_parquet(as.data.frame(dwc), "data/dwc_itis.parquet")
+  arrow::write_parquet(as.data.frame(common), "data/common_itis.parquet")
   
   #write_tsv(dwc, output_paths["dwc"])
   #write_tsv(common, output_paths["common"])

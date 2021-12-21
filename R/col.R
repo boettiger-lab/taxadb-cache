@@ -12,16 +12,15 @@
 #' @importFrom stats family setNames
 #' @importFrom utils download.file untar unzip
 #' @details NOTE: A list of  all snapshots available from: http://www.catalogueoflife.org/DCA_Export/archive.php
-preprocess_col <- function(url = "https://download.catalogueoflife.org/col/monthly/2021-06-10_dwca.zip",
-                           output_paths = c(dwc = "2021/dwc_col.tsv.bz2",
-                                            common = "2021/common_col.tsv.bz2"),
+preprocess_col <- function(archive,
+                           output_paths = c(dwc = "data/dwc_col.tsv.bz2",
+                                            common = "data/common_col.tsv.bz2"),
                            dir = file.path(tempdir(), "col")){
 
 
   dir.create(dir, FALSE, FALSE)
-  download.file(url,
-                file.path(dir, "col-2021.zip"))
-  unzip("2021/col-2021.zip", exdir=dir)
+
+  unzip(archive, exdir=dir)
 
   ## a better read_tsv
   read_tsv <- function(...) readr::read_tsv(..., quote = "",
@@ -82,7 +81,7 @@ preprocess_col <- function(url = "https://download.catalogueoflife.org/col/month
     filter(taxonRank %in% c("genus", "family", "order", "class", "phylum", "kingdom")) %>%
     select(-path_id) %>%    # count(id, taxonRank) %>% filter(n>1) # shows duplicates
     group_by(id, taxonRank) %>% slice_head(n=1) %>% # avoid duplicate 'family'. #slow 
-    pivot_wider(names_from = taxonRank, values_from = scientificName)  # very slow
+    tidyr::spread(taxonRank, scientificName)  # very slow
   
   # test that we have no spaces in names
   # sapply(wide, function(str) sum(grepl(" ",str)))
@@ -148,11 +147,11 @@ preprocess_col <- function(url = "https://download.catalogueoflife.org/col/month
   
   message("writing COL Output...\n")
 
- write_tsv(dwc, output_paths[["dwc"]])
- write_tsv(comm_table, output_paths[["common"]])
+ readr::write_tsv(dwc, output_paths[["dwc"]])
+ readr::write_tsv(comm_table, output_paths[["common"]])
  
- arrow::write_parquet(dwc, "2021/dwc_col.parquet")
- arrow::write_parquet(comm_table, "2021/common_col.parquet")
+ arrow::write_parquet(dwc, "data/dwc_col.parquet")
+ arrow::write_parquet(comm_table, "data/common_col.parquet")
  
 }
 

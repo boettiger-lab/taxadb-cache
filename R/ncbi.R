@@ -1,14 +1,12 @@
-preprocess_ncbi <- function(url,
+preprocess_ncbi <- function(archive,
                             output_paths =
                               c(dwc = "2020/dwc_ncbi.tsv.gz",
                                 common = "2020/common_ncbi.tsv.gz")){
   
   
   dir <- file.path(tempdir(), "ncbi")
-  archive <- file.path(dir, "taxdmp.zip")
   dir.create(dir, FALSE, FALSE)
-  download.file(url, archive)
-  message(paste(file_hash(archive)))
+
   
   
   unzip(archive, exdir=dir)
@@ -140,7 +138,9 @@ preprocess_ncbi <- function(url,
   tmp2 <- tmp1 %>% group_by(id, path_rank) %>% top_n(1, wt = path)
   rank <- ncbi %>% select(id, name, rank, name_type) %>% distinct()
   
-  ncbi_wide <- tmp2 %>% spread(path_rank, path) %>% distinct() %>% left_join(rank)
+  ncbi_wide <- tmp2 %>%
+    tidyr::spread(path_rank, path) %>%
+    distinct() %>% left_join(rank)
   
   
   ## Get common names for each entry
@@ -178,11 +178,16 @@ preprocess_ncbi <- function(url,
   
   dwc <- dwc %>% left_join(select(comm_table, acceptedNameUsageID, vernacularName))
   
-  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
-                        scientificName = clean_names(scientificName))
+  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
+                        scientificName = clean_names(scientificName, lowercase=FALSE))
   
   write_tsv(dwc, output_paths["dwc"])
   write_tsv(comm_table, output_paths["common"])
+  
+  
+  arrow::write_parquet(dwc, "data/dwc_ncbi.parquet")
+  arrow::write_parquet(comm_table, "data/common_ncbi.parquet")
+  
   
   file_hash(output_paths)
   

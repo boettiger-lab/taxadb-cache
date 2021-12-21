@@ -1,0 +1,38 @@
+# remotes::install_github("cboettig/prov")
+library(prov)
+library(tidyverse)
+library(Hmisc)
+devtools::load_all()
+
+in_url <-  "https://itis.gov/downloads/itisSqlite.zip"
+id <- contentid::store(in_url)
+in_file <- contentid::resolve(id)
+in_file <- fs::link_create(in_file, file.path("data", basename(in_url)))
+
+output_paths = c(dwc = "data/dwc_itis.tsv.gz",
+                 common = "data/common_itis.tsv.gz",
+                 dwc_parquet = "data/dwc_itis.parquet",
+                 common_parquet = "data/common_itis.parquet"
+)
+
+preprocess_itis(in_file, output_paths)
+
+## And publish provenance
+
+code <- c("R/itis.R","R/helper-routines.R", "jobs/itis.R")
+prov::write_prov(data_in = in_file,
+                 #code = code, 
+                 data_out =  unname(output_paths),
+                 title = "Integrated Taxonomic Information System (ITIS)",
+                 description = "Darwin Core formatted version of ITIS Taxonomy, created by rOpenSci",
+                 license = "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+                 creator = list("type" = "Organization", name = "ITIS",
+                                url = "https://itis.gov/",
+                                id = "https://itis.gov/"),
+                 identifier = "https://doi.org/10.5066/F7KH0KBK",
+                 version = "21.12",
+                 issued = "2021-12-18",
+                 url = "https://itis.gov",
+                 prov="schema.json",
+                 append=TRUE, 
+                 schema="http://schema.org")
