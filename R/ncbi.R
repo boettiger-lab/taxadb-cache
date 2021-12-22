@@ -65,6 +65,7 @@ preprocess_ncbi <- function(archive,
   
   #rm(list= c ("ncbi_taxa", "nodes", "names"))
   
+  ## WOW this one is considerably slower in duckdb than in dplyr 
   ## Recursively JOIN on id = parent
   ## FIXME do properly with recursive function and dplyr programming calls
   recursive_ncbi_ids <- ncbi_ids %>%
