@@ -13,17 +13,28 @@ if(!link_exists(path))
   path <- fs::link_create(in_file, path)
 
 
-tbls <- preprocess_ott(path)
 
-readr::write_tsv(tbls$dwc, "data/dwc_ott.tsv.gz")
-arrow::write_parquet(tbls$dwc, "data/dwc_ott.parquet")
+# hash-based memoizer for file-based workflow
+has_id <- FALSE
+if (fs::file_exists("schema.json")) {
+  #prov <- jsonlite::read_json("schema.json")
+  prov <- readLines("schema.json")
+  has_id <- any(grepl(id, prov))
+}
+
+if(!has_id) {
+  tbls <- preprocess_ott(path)
+}
+
+output_paths = list(dwc = "data/dwc_ott.tsv.gz",
+                 dwc_parquet =  "data/dwc_ott.parquet")
+readr::write_tsv(tbls$dwc, output_paths$dwc)
+arrow::write_parquet(tbls$dwc, output_paths$dwc_parquet)
 
 
 #readr::write_tsv(comm_table, "data/common_ott.tsv.gz")
 #arrow::write_parquet(comm_table, "data/common_ott.parquet")
 
-output_paths = c(dwc = "data/dwc_ott.tsv.gz",
-                 "data/dwc_ott.parquet")
 
 
 code <- c("R/ott.R","R/helper-routines.R", "jobs/ott.R")

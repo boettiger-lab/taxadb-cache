@@ -18,7 +18,18 @@ output_paths <- c(dwc = "data/dwc_col.tsv.gz",
                   dwc_parquet = "data/dwc_col.parquet",
                   common_parquet = "data/common_col.parquet")
 
-preprocess_col(path, output_paths = output_paths)
+# hash-based memoizer for file-based workflow
+has_id <- FALSE
+if (fs::file_exists("schema.json")) {
+  #prov <- jsonlite::read_json("schema.json")
+  prov <- readLines("schema.json")
+  has_id <- any(grepl(id, prov))
+}
+
+if (!has_id) {
+  preprocess_col(path, output_paths = output_paths)
+}
+
 
 code <- c("R/col.R","R/helper-routines.R", "jobs/col.R")
 prov::write_prov(data_in = path,

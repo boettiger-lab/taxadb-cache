@@ -8,18 +8,27 @@ in_url <-  "https://itis.gov/downloads/itisSqlite.zip"
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
 path <- file.path("data", basename(in_url))
-if(!link_exists(path))
+if (!link_exists(path)) {
   path <- fs::link_create(in_file, path)
-
-
+}
 output_paths = c(dwc = "data/dwc_itis.tsv.gz",
                  common = "data/common_itis.tsv.gz",
                  dwc_parquet = "data/dwc_itis.parquet",
                  common_parquet = "data/common_itis.parquet"
 )
 
-preprocess_itis(path, output_paths)
+has_id <- FALSE
+if (fs::file_exists("schema.json")) {
+  #prov <- jsonlite::read_json("schema.json")
+  prov <- readLines("schema.json")
+  has_id <- any(grepl(id, prov))
+}
 
+
+
+if (!has_id) {
+preprocess_itis(path, output_paths)
+}
 ## And publish provenance
 
 code <- c("R/itis.R","R/helper-routines.R", "jobs/itis.R")

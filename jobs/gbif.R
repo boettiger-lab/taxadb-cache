@@ -17,8 +17,18 @@ if(!link_exists(path))
 
 
 output_paths = c(dwc = "data/dwc_gbif.tsv.gz", common = "data/common_gbif.tsv.gz")
-preprocess_gbif(path, output_paths = output_paths)
 
+# hash-based memoizer for file-based workflow
+has_id <- FALSE
+if (fs::file_exists("schema.json")) {
+  #prov <- jsonlite::read_json("schema.json")
+  prov <- readLines("schema.json")
+  has_id <- any(grepl(id, prov))
+}
+
+if (!has_id) {
+  preprocess_gbif(path, output_paths = output_paths)
+}
 
 ## And publish provenance
 code <- c("R/gbif.R","R/helper-routines.R", "jobs/gbif.R")
