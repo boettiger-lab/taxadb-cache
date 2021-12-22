@@ -22,7 +22,7 @@ output_paths <- c("data/dwc_ncbi.tsv.gz",
 has_id <- FALSE
 if (fs::file_exists("schema.json")) {
   #prov <- jsonlite::read_json("schema.json")
-  prov <- readLines("schema-v2.json")
+  prov <- readLines("schema.json")
   has_id <- any(grepl(id, prov))
 }
 

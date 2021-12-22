@@ -110,6 +110,8 @@ preprocess_ncbi <- function(archive,
   
   rm(recursive_ncbi_ids)
   
+  ## FIXME -- should consider moving into duckdb at this point, too large otherwise!
+  
   expand <- ncbi %>%
     select(path_id = id, path = name, path_rank = rank, path_type = name_type)
   

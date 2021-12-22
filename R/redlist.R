@@ -30,14 +30,25 @@ redlist <- function(){
     Hmisc::capitalize(str_to_lower(x))
     #gsub("(. )([A-Z])(.+)", "\\1\\U\\2\\L\\3", x)
   }
-  dwc <- full %>%
-#    select(taxonId = taxonid, kingdom = kingdom_name, phylum = phylum_name,
-#           class = class_name, order = order_name, family = family_name,
-#           genus = genus_name, specificEpithet = species_name, 
-#           scientificName = scientific_name) %>%
-    mutate_if(is.character, sentence_case) %>%
-    mutate(id = paste0("IUCN:", taxonId))
+
   
+  dwc <- full %>% mutate(category = as.factor(category)) %>%
+    mutate(across(where(is.character), sentence_case)) %>%
+    mutate(taxonid = paste0("IUCN:", taxonid),
+           acceptedNameUsageId = taxonid,
+           specificEpithet = stringi::stri_split_boundaries(scientific_name, simplify = TRUE)[,2],
+           taxonomicStatus = "accepted") %>%
+    select(taxonId = taxonid, kingdom = kingdom_name, phylum = phylum_name,
+           class = class_name, order = order_name, family = family_name,
+           genus = genus_name, specificEpithet, infraspecificEpithet = infra_name,
+           scientificName = scientific_name,
+           vernacularName = main_common_name,
+           nameAccordingTo = taxonomic_authority,
+           acceptedNameUsageId,
+           population,
+           category)
+  ## population is not a dwc term; but IUCN taxonIds are unique to population, not necessarily to subspecies
+  ## category is obviously not a dwc term, but seems valuable/convenient enough to be retained
   dwc
 
 }
