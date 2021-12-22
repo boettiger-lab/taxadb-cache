@@ -37,6 +37,16 @@ preprocess_ncbi <- function(archive,
                          delim = "\t|",
                          col_names = name_cols,
                          col_types = name_type, quote ="")
+  
+  
+  ## Time to move into duckdb at this point, too large otherwise!
+  db <- DBI::dbConnect(duckdb::duckdb(tempfile()))
+  DBI::dbExecute(db, paste0("PRAGMA threads=", parallel::detectCores()))
+    DBI::dbWriteTable(db, "names", names)
+  DBI::dbWriteTable(db, "nodes", nodes)
+  names <- tbl(db, "names")
+  nodes <- tbl(db, "nodes")
+  
   ncbi_taxa <-
     inner_join(nodes,names) %>%
     select(tax_id, parent_tax_id, rank, name_txt, unique_name, name_class)
@@ -53,7 +63,7 @@ preprocess_ncbi <- function(archive,
     select(id = tax_id, name = name_txt, rank, name_type = name_class) %>%
     mutate(id = paste0("NCBI:", id))
   
-  rm(list= c ("ncbi_taxa", "nodes", "names"))
+  #rm(list= c ("ncbi_taxa", "nodes", "names"))
   
   ## Recursively JOIN on id = parent
   ## FIXME do properly with recursive function and dplyr programming calls
@@ -94,23 +104,28 @@ preprocess_ncbi <- function(archive,
     left_join(rename(ncbi_ids, p35 = parent_tsn), by = c("p34" = "tsn")) %>%
     left_join(rename(ncbi_ids, p36 = parent_tsn), by = c("p35" = "tsn")) %>%
     left_join(rename(ncbi_ids, p37 = parent_tsn), by = c("p36" = "tsn")) %>%
-    left_join(rename(ncbi_ids, p38 = parent_tsn), by = c("p37" = "tsn"))
-  
-  rm(ncbi_ids)
+    left_join(rename(ncbi_ids, p38 = parent_tsn), by = c("p37" = "tsn")) %>%
+    left_join(rename(ncbi_ids, p39 = parent_tsn), by = c("p38" = "tsn")) %>%
+    left_join(rename(ncbi_ids, p40 = parent_tsn), by = c("p39" = "tsn")) %>%
+    compute()
+    
+  #rm(ncbi_ids)
   ## expect_true: confirm we have resolved all ids
-  all(recursive_ncbi_ids[[length(recursive_ncbi_ids)]] == "NCBI:1")
+  #all(recursive_ncbi_ids[[length(recursive_ncbi_ids)]] == "NCBI:1")
   
   ## many more ids than path_ids
   long_hierarchy <-
     recursive_ncbi_ids %>%
-    tidyr::gather(dummy, path_id, -tsn) %>%
+    pivot_longer(-tsn, names_to=dummy, values_to = path_id) %>%
+    # tidyr::gather(dummy, path_id, -tsn) %>%
     select(id = tsn, path_id) %>%
     distinct() %>%
     arrange(id)
   
   rm(recursive_ncbi_ids)
   
-  ## FIXME -- should consider moving into duckdb at this point, too large otherwise!
+  
+  
   
   expand <- ncbi %>%
     select(path_id = id, path = name, path_rank = rank, path_type = name_type)
@@ -127,6 +142,8 @@ preprocess_ncbi <- function(archive,
   #  select(id, name, rank) %>% distinct()
   # 33,082 known species
   
+  
+  
   ## de-duplication of duplicate ranks
   tmp1 <- ncbi_long %>%
     #filter(path_type == "scientific name", rank == "species") %>%
@@ -137,11 +154,15 @@ preprocess_ncbi <- function(archive,
     filter(path_rank != "no rank") %>% ## Wide format includes named ranks only
     filter(path_rank != "superfamily")
   
-  tmp2 <- tmp1 %>% group_by(id, path_rank) %>% top_n(1, wt = path)
-  rank <- ncbi %>% select(id, name, rank, name_type) %>% distinct()
+  tmp2 <- tmp1 %>% group_by(id, path_rank) %>%
+    slice_max(n = 1, order_by = path, with_ties = FALSE)
+  rank <- ncbi %>% select(id, name, rank, name_type) %>%
+    distinct() # %>% collect()
   
-  ncbi_wide <- tmp2 %>%
-    tidyr::spread(path_rank, path) %>%
+  ncbi_wide <- tmp2 %>% 
+    #collect() %>%
+    tidyr::pivot_wider(names_from = path_rank, values_from = path, names_repair = "unique" ) %>%
+    #tidyr::spread(path_rank, path) %>%    ## pivot_wider fails?
     distinct() %>% left_join(rank)
   
   
