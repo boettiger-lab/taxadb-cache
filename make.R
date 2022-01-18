@@ -32,8 +32,8 @@ in_file <- "2021/col-2021.zip"
 download.file(in_url, in_file)
 
 code <- c("R/col.R","R/helper-routines.R", "make.R")
-output_paths <- c(dwc = "2021/dwc_col.tsv.gz",
-                  common = "2021/common_col.tsv.gz")
+output_paths <- c(dwc = "2021/dwc_col.tsv.bz2",
+                  common = "2021/common_col.tsv.bz2")
 
 preprocess_col(url = in_url, output_paths = output_paths)
 
