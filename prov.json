@@ -83,6 +83,31 @@
     "SoftwareSourceCode": "sdo:SoftwareSourceCode"
   },
   "@graph": [
+    
+       {
+          "id": "hash://sha256/c47bf2e4dfdcb99199b7d8edb8994fea73fd9244027e1c8153c63453cc75687b",
+          "type": "Distribution",
+          "byteSize": 16082349,
+          "wasGeneratedAtTime": "2021-12-22",
+          "description": "output data",
+          "format": "text/tab-separated-values",
+          "compressFormat": "gz",
+          "identifier": "hash://sha256/c47bf2e4dfdcb99199b7d8edb8994fea73fd9244027e1c8153c63453cc75687b",
+          "title": "dwc_itis.tsv.gz"
+        },
+        {
+          "id": "hash://sha256/22b5f8cf4d7d4f42bb2d03bd4383c63c0e9a8e6e5d7d1aaf4f880ff0753f7394",
+          "type": "Distribution",
+          "byteSize": 3850496,
+          "wasGeneratedAtTime": "2021-12-22",
+          "description": "output data",
+          "format": "text/tab-separated-values",
+          "compressFormat": "gz",
+          "identifier": "hash://sha256/22b5f8cf4d7d4f42bb2d03bd4383c63c0e9a8e6e5d7d1aaf4f880ff0753f7394",
+          "title": "common_itis.tsv.gz"
+        },
+    
+    
     {
       "id": "hash://sha256/0729934ab69a476a0d6be0b3954e2ebdbd76662df198ac7c002e8cd4b7628864",
       "type": [
