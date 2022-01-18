@@ -43,7 +43,7 @@ clean_names <-
            binomial_only = FALSE,
            remove_sp = TRUE,
            ascii_only = TRUE,
-           lowercase = TRUE,
+           lowercase = FALSE,
            remove_punc = TRUE){
     if(lowercase)
       names <- stringi::stri_trans_tolower(names)

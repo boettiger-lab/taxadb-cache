@@ -4,26 +4,19 @@
 #' @inheritParams preprocess_col
 #' @export
 #'
-preprocess_gbif <- function(url = "http://rs.gbif.org/datasets/backbone/backbone-current.zip",
+preprocess_gbif <- function(archive,
                             output_paths = c(dwc = "2019/dwc_gbif.tsv.bz2",
                                              common = "2019/common_gbif.tsv.bz2")
                               ){
-
-  dir <- file.path(tempdir(), "gbif")
-  dir.create(dir, FALSE, FALSE)
-  archive <- file.path(dir, "backbone.zip")
-  download.file(url,
-                archive)
-
-
-  message(paste(file_hash(archive)))
-
-  unzip(archive, exdir=dir)
+  dir <- tempfile()  
+  dir.create(dir)
+  zip::unzip(archive, exdir=dir)
 
   ## a better read_tsv
   read_tsv <- function(...) readr::read_tsv(..., quote = "", col_types = readr::cols(.default = "c"))
 
   ## And here we go!
+  dir <- file.path(dir, "backbone")
   taxon <- read_tsv(file.path(dir, "Taxon.tsv"))
   ## canonicalName appears to be: Genus + specificEpithet + infraspecificEpithet
   ## i.e. SpecificEpithet ~ a name at the "species" rank
@@ -93,8 +86,8 @@ preprocess_gbif <- function(url = "http://rs.gbif.org/datasets/backbone/backbone
 
   
   
-  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName),
-                        scientificName = clean_names(scientificName))
+  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
+                        scientificName = clean_names(scientificName, lowercase=FALSE))
 
   dir.create(dirname(output_paths[["dwc"]]), FALSE)
   write_tsv(dwc, output_paths[["dwc"]])

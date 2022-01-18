@@ -1,19 +1,11 @@
 #' @import fs readr dplyr purrr tibble
 #' @export
-preprocess_ott <-
-  function(url = "http://files.opentreeoflife.org/ott/ott3.2/ott3.2.tgz",
-           output_paths = c(dwc = "2019/dwc_ott.tsv.bz2")
-){
+preprocess_ott <- function(archive){
 
-  dir = file.path(tempdir(), "ott")
-  archive = file.path(dir, "ott.tgz")
+  dir <- file.path(tempdir(), "ott")
   dir.create(dir, FALSE, FALSE)
-  download.file(url,archive)
-
-  basedir <- dirname(archive)
-
-  untar(archive, exdir = basedir)
-  dir <- fs::dir_ls(basedir, type="dir")
+  untar(archive, exdir = dir)
+  dir <- fs::dir_ls(dir, type="dir")
 
   ## defaulting to logicals is so annoying!
   read_tsv <- function(...){
@@ -115,6 +107,10 @@ preprocess_ott <-
 
   rm(expand, long_hierarchy)
 
+  
+  ## Ranks really don't hold up so well in OTT world.  Kingdoms really suffer...
+  ## what happened to plants?
+  
   ## Only species get the DarwinCore rank columns.  All names have rank in taxonRank field
   pre_spread <-
     ott_long %>%
@@ -138,7 +134,7 @@ preprocess_ott <-
   rm(pre_spread)
 
   ott_wide <- dedup %>%
-    spread(path_rank, path) %>%
+    tidyr::spread(path_rank, path) %>%
     distinct() %>%
     select(taxonID = id,
            kingdom, phylum, class, order, family, genus,
@@ -173,10 +169,10 @@ preprocess_ott <-
 
   
   
-  dwc <- dwc %>% mutate(scientificName = clean_names(scientificName))
+  dwc <- dwc %>% mutate(scientificName = taxadb:::clean_names(scientificName, lowercase=FALSE))
 
-    write_tsv(dwc, output_paths["dwc"])
-
+  #write_tsv(dwc, output_paths["dwc"])
+  list(dwc = dwc, common = NULL)
 
 }
 
