@@ -106,7 +106,107 @@
           "identifier": "hash://sha256/22b5f8cf4d7d4f42bb2d03bd4383c63c0e9a8e6e5d7d1aaf4f880ff0753f7394",
           "title": "common_itis.tsv.gz"
         },
+         {
+      "id": "hash://sha256/d95b790c99bc5869cca31d70ffa3b80f26cdfff0c2f35571cdb3dc3685ea23dc",
+      "type": "Distribution",
+      "identifier": "hash://sha256/d95b790c99bc5869cca31d70ffa3b80f26cdfff0c2f35571cdb3dc3685ea23dc",
+      "title": "common_col.parquet",
+      "description": "output data",
+      "format": "application/vnd.apache.parquet",
+      "compressFormat": null,
+      "byteSize": 10222085,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
+    {
+      "id": "hash://sha256/eb66d3d3f8e697c637b26e6ebf14e9dbb4a9bda1950819fc1f357c76208fd3d3",
+      "type": "Distribution",
+      "identifier": "hash://sha256/eb66d3d3f8e697c637b26e6ebf14e9dbb4a9bda1950819fc1f357c76208fd3d3",
+      "title": "common_col.tsv.bz2",
+      "description": "output data",
+      "format": "text/tab-separated-values",
+      "compressFormat": "bz2",
+      "byteSize": 5705906,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
+    {
+      "id": "hash://sha256/0d0a61f8122f1a13cb1fcdb8e13065f5d95071873c84639cc2e39fa131ce99e6",
+      "type": "Distribution",
+      "identifier": "hash://sha256/0d0a61f8122f1a13cb1fcdb8e13065f5d95071873c84639cc2e39fa131ce99e6",
+      "title": "common_gbif.tsv.gz",
+      "description": "output data",
+      "format": "text/tab-separated-values",
+      "compressFormat": "gzip",
+      "byteSize": 10254364,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
     
+    {
+      "id": "hash://sha256/6aa4beb2feafbb599e2f58621aa0700974a00199f89f543d7e8b8b283c074e27",
+      "type": "Distribution",
+      "identifier": "hash://sha256/6aa4beb2feafbb599e2f58621aa0700974a00199f89f543d7e8b8b283c074e27",
+      "title": "common_ncbi.tsv.gz",
+      "description": "output data",
+      "format": "text/tab-separated-values",
+      "compressFormat": "gzip",
+      "byteSize": 29712080,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
+    {
+      "id": "hash://sha256/74f95ca0fb0049f322d2b827b96e6552abd138b7b43312409d688bb9c12f07af",
+      "type": "Distribution",
+      "identifier": "hash://sha256/74f95ca0fb0049f322d2b827b96e6552abd138b7b43312409d688bb9c12f07af",
+      "title": "dwc_col.parquet",
+      "description": "output data",
+      "format": "application/vnd.apache.parquet",
+      "compressFormat": null,
+      "byteSize": 254769358,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
+    {
+      "id": "hash://sha256/95cfbe83ee254714c5fdaf413daa0a43a80b7de96f087f5072747b6378e98811",
+      "type": "Distribution",
+      "identifier": "hash://sha256/95cfbe83ee254714c5fdaf413daa0a43a80b7de96f087f5072747b6378e98811",
+      "title": "dwc_col.tsv.bz2",
+      "description": "output data",
+      "format": "text/tab-separated-values",
+      "compressFormat": "bz2",
+      "byteSize": 125969223,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
+    {
+      "id": "hash://sha256/367cf3b0501efb32005de26ea093bedd43d5d7e759b4b3929a3a884927274925",
+      "type": "Distribution",
+      "identifier": "hash://sha256/367cf3b0501efb32005de26ea093bedd43d5d7e759b4b3929a3a884927274925",
+      "title": "dwc_gbif.tsv.gz",
+      "description": "output data",
+      "format": "text/tab-separated-values",
+      "compressFormat": "gzip",
+      "byteSize": 222188330,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
+    
+    {
+      "id": "hash://sha256/1b5941879daf2e771bceaea533b3b5271117531fde20131be0a7f970a59b1a23",
+      "type": "Distribution",
+      "identifier": "hash://sha256/1b5941879daf2e771bceaea533b3b5271117531fde20131be0a7f970a59b1a23",
+      "title": "dwc_ncbi.tsv.gz",
+      "description": "output data",
+      "format": "text/tab-separated-values",
+      "compressFormat": "gzip",
+      "byteSize": 64105168,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
+    {
+      "id": "hash://sha256/3f1596f62c41d550bf75fecec64d99a12c676832ef3105155b72cf85b4e8f5af",
+      "type": "Distribution",
+      "identifier": "hash://sha256/3f1596f62c41d550bf75fecec64d99a12c676832ef3105155b72cf85b4e8f5af",
+      "title": "dwc_ott.tsv.gz",
+      "description": "output data",
+      "format": "text/tab-separated-values",
+      "compressFormat": "gzip",
+      "byteSize": 109687923,
+      "wasGeneratedAtTime": "2022-01-18 19:19:20"
+    },
     
     {
       "id": "hash://sha256/0729934ab69a476a0d6be0b3954e2ebdbd76662df198ac7c002e8cd4b7628864",
