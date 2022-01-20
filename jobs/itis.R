@@ -46,8 +46,7 @@ prov::write_prov(data_in = path,
                  version = "21.12",
                  issued = "2021-12-18",
                  url = "https://itis.gov",
-                 prov="schema.json",
-                 append=TRUE, 
+                 prov="itis_schema.json",
                  schema="http://schema.org")
 
 

@@ -94,4 +94,5 @@ preprocess_gbif <- function(archive,
   write_tsv(comm_names, output_paths[["common"]])
 
   file_hash(output_paths)
+  list(dwc, comm_names)
 }

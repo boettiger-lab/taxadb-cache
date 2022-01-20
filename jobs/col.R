@@ -2,14 +2,15 @@
 library(prov)
 library(tidyverse)
 library(Hmisc)
+library(fs)
 devtools::load_all()
 
-in_url <- "https://download.catalogueoflife.org/col/monthly/2021-10-18_dwca.zip"
+in_url <- "https://download.catalogueoflife.org/col/monthly/2021-12-18_dwca.zip"
 #in_url <- paste0("http://www.catalogueoflife.org/DCA_Export/zip-fixed/", 2021, "-annual.zip")
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
 path <- file.path("data", basename(in_url))
-if(!link_exists(path))
+if(!fs::link_exists(path))
   path <- fs::link_create(in_file, path)
 
 
@@ -20,9 +21,9 @@ output_paths <- c(dwc = "data/dwc_col.tsv.gz",
 
 # hash-based memoizer for file-based workflow
 has_id <- FALSE
-if (fs::file_exists("schema.json")) {
+if (fs::file_exists("col_schema.json")) {
   #prov <- jsonlite::read_json("schema.json")
-  prov <- readLines("schema.json")
+  prov <- readLines("col_schema.json")
   has_id <- any(grepl(id, prov))
 }
 
@@ -45,6 +46,7 @@ prov::write_prov(data_in = path,
                                 url = "https://www.catalogueoflife.org/",
                                 id = "https://www.catalogueoflife.org/"),
                  version = "21.12",
-                 issued = "2021-10-18",
-                 prov="schema.json", append=TRUE, schema="http://schema.org")
+                 issued = "2021-12-18",
+                 prov="col_schema.json",
+                 schema="http://schema.org")
 

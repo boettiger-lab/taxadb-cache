@@ -16,9 +16,9 @@ if(!link_exists(path))
 
 # hash-based memoizer for file-based workflow
 has_id <- FALSE
-if (fs::file_exists("schema.json")) {
+if (fs::file_exists("ott_schema.json")) {
   #prov <- jsonlite::read_json("schema.json")
-  prov <- readLines("schema.json")
+  prov <- readLines("ott_schema.json")
   has_id <- any(grepl(id, prov))
 }
 
@@ -51,7 +51,7 @@ prov::write_prov(data_in = path,
                                 id = "https://opentreeoflife.org"),
                  version = "21.12",
                  issued = "2021-06-01",
-                 prov="schema.json",
+                 prov="ott_schema.json",
                  append=TRUE,
                  schema="http://schema.org")
 

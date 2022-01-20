@@ -8,8 +8,13 @@ devtools::load_all()
 rm(list=ls())
 
 in_url <- "https://hosted-datasets.gbif.org/datasets/backbone/2021-11-26/backbone.zip"
-download.file(in_url, basename(in_url), method="wget", quiet=TRUE)
-id <- contentid::store(basename(in_url))
+id <- contentid::store(in_url)
+
+## sometimes gbif has download issues
+#tmp <- tempfile(fileext = "zip")
+#download.file(in_url, tmp, method="wget", quiet=TRUE)
+#id <- contentid::store(tmp)
+
 in_file <- contentid::resolve(id)
 path <- file.path("data", basename(in_url))
 if(!link_exists(path))
@@ -20,14 +25,14 @@ output_paths = c(dwc = "data/dwc_gbif.tsv.gz", common = "data/common_gbif.tsv.gz
 
 # hash-based memoizer for file-based workflow
 has_id <- FALSE
-if (fs::file_exists("schema.json")) {
+if (fs::file_exists("gbif_schema.json")) {
   #prov <- jsonlite::read_json("schema.json")
-  prov <- readLines("schema.json")
+  prov <- readLines("gbif_schema.json")
   has_id <- any(grepl(id, prov))
 }
 
 if (!has_id) {
-  preprocess_gbif(path, output_paths = output_paths)
+  gbif <- preprocess_gbif(path, output_paths = output_paths)
 }
 
 ## And publish provenance
@@ -46,7 +51,8 @@ prov::write_prov(data_in = path,
                  issued = "2021-11-26",
                  url = "https://www.gbif.org",
                  identifier = "https://doi.org/10.15468/39omei",
-                 prov="schema.json", 
-                 append=TRUE,
+                 prov="gbif_schema.json", 
                  schema="http://schema.org")
+
+
 
