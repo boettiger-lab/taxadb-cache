@@ -13,13 +13,14 @@
 #' @importFrom utils download.file untar unzip
 #' @details NOTE: A list of  all snapshots available from: http://www.catalogueoflife.org/DCA_Export/archive.php
 preprocess_col <- function(archive,
-                           output_paths = c(dwc = "data/dwc_col.tsv.bz2",
-                                            common = "data/common_col.tsv.bz2"),
-                           dir = file.path(tempdir(), "col")){
+                           output_paths = c(dwc = "data/dwc_col.tsv.gz",
+                                            common = "data/common_col.tsv.gz",
+                                            dwc_parquet = "data/dwc_col.parquet",
+                                            common_parquet = "data/common_col.parquet")){
 
-
+  
+  dir = file.path(tempdir(), "col")
   dir.create(dir, FALSE, FALSE)
-
   unzip(archive, exdir=dir)
 
   ## a better read_tsv

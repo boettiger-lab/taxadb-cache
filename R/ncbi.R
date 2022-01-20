@@ -40,12 +40,13 @@ preprocess_ncbi <- function(archive,
   
   
   ## Time to move into duckdb at this point, too large otherwise!
-  db <- DBI::dbConnect(duckdb::duckdb(tempfile()))
-  DBI::dbExecute(db, paste0("PRAGMA threads=", parallel::detectCores()))
-    DBI::dbWriteTable(db, "names", names)
-  DBI::dbWriteTable(db, "nodes", nodes)
-  names <- tbl(db, "names")
-  nodes <- tbl(db, "nodes")
+  ## 40 recursive joins never finishes compute in duckdb... delay this
+  #db <- DBI::dbConnect(duckdb::duckdb(tempfile()))
+  #DBI::dbExecute(db, paste0("PRAGMA threads=", parallel::detectCores()))
+  #DBI::dbWriteTable(db, "names", names)
+  #DBI::dbWriteTable(db, "nodes", nodes)
+  #names <- tbl(db, "names")
+  #nodes <- tbl(db, "nodes")
   
   ncbi_taxa <-
     inner_join(nodes,names) %>%
@@ -110,14 +111,28 @@ preprocess_ncbi <- function(archive,
     left_join(rename(ncbi_ids, p40 = parent_tsn), by = c("p39" = "tsn")) %>%
     compute()
     
+  
+  
+  
   #rm(ncbi_ids)
   ## expect_true: confirm we have resolved all ids
   #all(recursive_ncbi_ids[[length(recursive_ncbi_ids)]] == "NCBI:1")
   
+  
+  ## Time to move into duckdb at this point, too large otherwise!
+  ## 40 recursive joins never finishes compute in duckdb... delay this
+  db <- DBI::dbConnect(duckdb::duckdb(tempfile()))
+  DBI::dbExecute(db, paste0("PRAGMA threads=", parallel::detectCores()))
+  DBI::dbWriteTable(db, "recursive_ncbi_ids", recursive_ncbi_ids)
+  recursive_ncbi_ids <- tbl(db, "recursive_ncbi_ids")
+  DBI::dbWriteTable(db, "ncbi", ncbi)
+  ncbi <- tbl(db, "ncbi")
+  
+  
   ## many more ids than path_ids
   long_hierarchy <-
     recursive_ncbi_ids %>%
-    pivot_longer(-tsn, names_to=dummy, values_to = path_id) %>%
+    pivot_longer(-tsn, names_to="dummy", values_to = "path_id") %>%
     # tidyr::gather(dummy, path_id, -tsn) %>%
     select(id = tsn, path_id) %>%
     distinct() %>%
@@ -214,5 +229,7 @@ preprocess_ncbi <- function(archive,
   
   
   file_hash(output_paths)
+  
+  list(dwc, comm_table)
   
 }

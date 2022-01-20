@@ -20,9 +20,9 @@ output_paths <- c("data/dwc_ncbi.tsv.gz",
 
 # hash-based memoizer for file-based workflow
 has_id <- FALSE
-if (fs::file_exists("schema.json")) {
+if (fs::file_exists("ncbi_schema.json")) {
   #prov <- jsonlite::read_json("schema.json")
-  prov <- readLines("schema.json")
+  prov <- readLines("ncbi_schema.json")
   has_id <- any(grepl(id, prov))
 }
 
@@ -44,6 +44,8 @@ prov::write_prov(data_in = path,
                  version = "21.12",
                  issued = "2021-12-01",
                  url = "https://www.ncbi.nlm.nih.gov/taxonomy",
-                 prov="schema.json",
-                 append=TRUE, 
+                 prov="ncbi_schema.json",
                  schema="http://schema.org")
+
+
+
