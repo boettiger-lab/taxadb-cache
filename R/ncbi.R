@@ -122,7 +122,9 @@ preprocess_ncbi <- function(archive,
   ## Time to move into duckdb at this point, too large otherwise!
   ## 40 recursive joins never finishes compute in duckdb... delay this
   db <- DBI::dbConnect(duckdb::duckdb(tempfile()))
-  DBI::dbExecute(db, paste0("PRAGMA threads=", parallel::detectCores()))
+  DBI::dbExecute(db, paste0("PRAGMA threads=", 1L))
+  DBI::dbExecute(db, paste0("PRAGMA memory_limit='32GB'"))
+  
   DBI::dbWriteTable(db, "recursive_ncbi_ids", recursive_ncbi_ids)
   recursive_ncbi_ids <- tbl(db, "recursive_ncbi_ids")
   DBI::dbWriteTable(db, "ncbi", ncbi)
@@ -136,9 +138,10 @@ preprocess_ncbi <- function(archive,
     # tidyr::gather(dummy, path_id, -tsn) %>%
     select(id = tsn, path_id) %>%
     distinct() %>%
-    arrange(id)
+    arrange(id) %>%
+    compute()
   
-  rm(recursive_ncbi_ids)
+  # rm(recursive_ncbi_ids)
   
   
   
@@ -160,37 +163,49 @@ preprocess_ncbi <- function(archive,
   
   
   
-  ## de-duplication of duplicate ranks
+  message(" de-duplication of duplicate ranks")
   tmp1 <- ncbi_long %>%
-    #filter(path_type == "scientific name", rank == "species") %>%
+    filter(path_type == "scientific name", rank == "species") %>%
     select(id, species = name, path, path_rank) %>%
     distinct() %>%
     # ncbii has a few duplicate "superfamily" with both as "scientific name"
     # This is probably a bug in there data as one of these should be "synonym"(?)
     filter(path_rank != "no rank") %>% ## Wide format includes named ranks only
-    filter(path_rank != "superfamily")
+    filter(path_rank != "superfamily") %>%
+    compute()
   
-  tmp2 <- tmp1 %>% group_by(id, path_rank) %>%
-    slice_max(n = 1, order_by = path, with_ties = FALSE)
+  tmp2 <- tmp1 %>% 
+    group_by(id, path_rank) %>%
+    slice_max(n = 1, order_by = path, with_ties = FALSE) %>% 
+    ungroup()
   rank <- ncbi %>% select(id, name, rank, name_type) %>%
-    distinct() # %>% collect()
+    distinct() %>% 
+    ungroup() # %>% collect()
   
+  message("prepare ncbi wide")
   ncbi_wide <- tmp2 %>% 
-    #collect() %>%
     tidyr::pivot_wider(names_from = path_rank, values_from = path, names_repair = "unique" ) %>%
-    #tidyr::spread(path_rank, path) %>%    ## pivot_wider fails?
-    distinct() %>% left_join(rank)
+    distinct() %>% 
+    left_join(rank) %>%
+    ungroup() %>% 
+    compute()
   
   
-  ## Get common names for each entry
+  message("Get common names for each entry")
   ncbi_common <- ncbi %>%
     filter(name_type == "common name") %>%
-    n_in_group(group_var = "id", n = 1, wt = name) %>%
-    select(id, name)
+    #n_in_group(group_var = "id", n = 1, wt = name) %>%
+    group_by(id) %>%
+    slice_max(order_by = name, n = 1, with_ties = FALSE) %>%
+    ungroup() %>%
+    distinct() %>%
+    select(id, name) %>% 
+    compute()
   
   
-  ##### Rename things to Darwin Core
+  message("Rename things to Darwin Core")
   dwc <- ncbi_wide %>%
+    ungroup() %>%
     rename(taxonID = id,
            scientificName = name,
            taxonRank = rank,
@@ -199,29 +214,51 @@ preprocess_ncbi <- function(archive,
     select(taxonID, scientificName, taxonRank,
            taxonomicStatus, acceptedNameUsageID,
            kingdom, phylum, class, order, family, genus,
-           specificEpithet = species) %>% ungroup()
+           specificEpithet = species) %>% 
+    compute()
+
+  dwc <- dwc %>% 
+    mutate(taxonomicStatus =
+             case_when(taxonomicStatus == "scientific name" ~ "accepted",
+                       taxonomicStatus != "scientific name" ~ taxonomicStatus))
+  ## taxonID is NA for non-accepted names
+  ## (note that authority name is treated as a kind of synonym this way...)
+  dwc <- dwc %>% mutate(taxonID = 
+                          case_when(taxonomicStatus == "accepted" ~ taxonID,
+                                    taxonomicStatus != "accepted" ~ NA
+                                    )
+  )
   
-  dwc$taxonID[dwc$taxonomicStatus  != "scientific name"] <- NA_character_
-  dwc$taxonomicStatus[dwc$taxonomicStatus  == "scientific name"] <- "accepted"
+#  dwc$taxonID[dwc$taxonomicStatus  != "scientific name"] <- NA_character_
+#  dwc$taxonomicStatus[dwc$taxonomicStatus  == "scientific name"] <- "accepted"
   
   
-  #Common name table
-  comm_table <- dwc %>%
+  dwc <- dwc %>% mutate(taxonID = case_when(taxonomicStatus != "scientific_name" ~ NA))
+  dwc <- dwc %>% compute()
+  
+  message("finalize common name table")
+  comm_table <- dwc %>% ungroup() %>%
     filter(taxonomicStatus == "common name") %>%
     select(acceptedNameUsageID, vernacularName = scientificName) %>%
     right_join(dwc) %>%
     #for this provider every acceptedNameUsageID has one accepted scientific name,
     ##  so just filter for those
     filter(taxonomicStatus == "accepted") %>%
-    select(vernacularName, scientificName, taxonRank, taxonID, acceptedNameUsageID, taxonomicStatus)
-  
+    select(vernacularName, scientificName, taxonRank, taxonID, acceptedNameUsageID, taxonomicStatus) %>% 
+    compute()
+
   dwc <- dwc %>% left_join(select(comm_table, acceptedNameUsageID, vernacularName))
+  message("clean names -- (doesn't support remote tables)")
+  dwc <- dwc %>% collect() %>%
+    mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
+           scientificName = clean_names(scientificName, lowercase=FALSE))
   
-  dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
-                        scientificName = clean_names(scientificName, lowercase=FALSE))
+  #DBI::dbExecute(db, "COPY (SELECT * FROM <TABLENAME>) TO 'tablename.parquet' (FORMAT 'parquet');")
+  #DBI::dbExecute(db, "COPY (SELECT * FROM comm_table) TO 'common_ncbi.parquet' (FORMAT 'parquet');")
   
-  write_tsv(dwc, output_paths["dwc"])
-  write_tsv(comm_table, output_paths["common"])
+  comm_table <- comm_table %>% collect()
+  write_tsv(dwc, "data/dwc_ncbi.tsv.gz")
+  write_tsv(comm_table, "data/common_ncbi.tsv.gz")
   
   
   arrow::write_parquet(dwc, "data/dwc_ncbi.parquet")
@@ -230,6 +267,5 @@ preprocess_ncbi <- function(archive,
   
   file_hash(output_paths)
   
-  list(dwc, comm_table)
-  
+  db  
 }
