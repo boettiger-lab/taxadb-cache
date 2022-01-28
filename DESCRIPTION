@@ -34,7 +34,8 @@ Imports:
     rfishbase,
     stringr,
     aws.s3,
-    prov
+    prov,
+    archive
 Suggests:
     spelling,
     testthat,
