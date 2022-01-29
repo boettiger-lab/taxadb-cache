@@ -161,29 +161,28 @@
       "byteSize": 4663861,
       "wasGeneratedAtTime": "2022-01-21 23:50:47"
     },
-     {
-      "id": "hash://sha256/664fd9f899d49cf391868ce1ff919bb2327b12e17dbb5b7bd7e8a67b9f466423",
+    {
+      "id": "hash://sha256/f1e7676f52b7e8241f9e9a4f6e7d93c037be76408e440d5e4d97886d9bfeb85c",
       "type": "Distribution",
-      "identifier": "hash://sha256/664fd9f899d49cf391868ce1ff919bb2327b12e17dbb5b7bd7e8a67b9f466423",
+      "identifier": "hash://sha256/f1e7676f52b7e8241f9e9a4f6e7d93c037be76408e440d5e4d97886d9bfeb85c",
       "title": "common_ncbi.tsv.gz",
       "description": "output data",
       "format": "text/tab-separated-values",
       "compressFormat": "gzip",
-      "byteSize": 89,
-      "wasGeneratedAtTime": "2022-01-21 23:59:11"
+      "byteSize": 36250973,
+      "wasGeneratedAtTime": "2022-01-29 00:36:38"
     },
     {
-      "id": "hash://sha256/3b3eec1ca73d846b77a17c87427314cfd91d401f58ed07206a8543cf43373e95",
+      "id": "hash://sha256/8b08c63963c7f08c664e275a67135cd146434c49df592da491f00b8debc2a0cf",
       "type": "Distribution",
-      "identifier": "hash://sha256/3b3eec1ca73d846b77a17c87427314cfd91d401f58ed07206a8543cf43373e95",
+      "identifier": "hash://sha256/8b08c63963c7f08c664e275a67135cd146434c49df592da491f00b8debc2a0cf",
       "title": "dwc_ncbi.tsv.gz",
       "description": "output data",
       "format": "text/tab-separated-values",
       "compressFormat": "gzip",
-      "byteSize": 136500920,
-      "wasGeneratedAtTime": "2022-01-21 23:59:11"
+      "byteSize": 100222666,
+      "wasGeneratedAtTime": "2022-01-29 00:36:38"
     },
-    
     {
       "id": "hash://sha256/0729934ab69a476a0d6be0b3954e2ebdbd76662df198ac7c002e8cd4b7628864",
       "type": [
