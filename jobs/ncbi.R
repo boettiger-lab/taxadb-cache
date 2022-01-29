@@ -27,7 +27,7 @@ if (fs::file_exists("ncbi_schema.json")) {
 }
 
 if (!has_id) {
-  preprocess_ncbi(path, output_paths)
+  ncbi <- preprocess_ncbi(path, output_paths)
 }
 
 code <- c("R/ncbi.R", "R/helper-routines.R", "jobs/ncbi.R")
