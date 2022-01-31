@@ -5,13 +5,11 @@
 \title{preprocess_itis}
 \usage{
 preprocess_itis(
-  url = "https://www.itis.gov/downloads/itisSqlite.zip",
-  output_paths = c(dwc = "2019/dwc_itis.tsv.bz2", common = "2019/common_itis.tsv.bz2")
+  archive,
+  output_paths = c(dwc = "2021/dwc_itis.tsv.bz2", common = "2021/common_itis.tsv.bz2")
 )
 }
 \arguments{
-\item{url}{Original source}
-
 \item{output_paths}{paths where output will be written: must be two paths, one named dwc, one named common}
 }
 \description{

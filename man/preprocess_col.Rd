@@ -5,16 +5,15 @@
 \title{preprocess_col}
 \usage{
 preprocess_col(
-  url = paste0("http://www.catalogueoflife.org/DCA_Export/zip-fixed/", 2019,
-    "-annual.zip"),
-  output_paths = c(dwc = "2019/dwc_col.tsv.bz2", common = "2019/common_col.tsv.bz2"),
-  dir = file.path(tempdir(), "col")
+  archive,
+  output_paths = c(dwc = "data/dwc_col.tsv.gz", common = "data/common_col.tsv.gz",
+    dwc_parquet = "data/dwc_col.parquet", common_parquet = "data/common_col.parquet")
 )
 }
 \arguments{
-\item{url}{Original source}
-
 \item{output_paths}{paths where output will be written: must be two paths, one named dwc, one named common}
+
+\item{url}{Source of Catalogue of Life}
 
 \item{dir}{working directory for downloads, will be tempdir() by default}
 }

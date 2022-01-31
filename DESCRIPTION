@@ -10,7 +10,6 @@ Authors@R: c(
             )
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 ByteCompile: true
 Imports:
     dplyr,
@@ -35,7 +34,12 @@ Imports:
     stringr,
     aws.s3,
     prov,
-    archive
+    archive,
+    httr,
+    zip, 
+    arrow,
+    duckdb,
+    taxadb
 Suggests:
     spelling,
     testthat,
@@ -45,5 +49,5 @@ Language: en-US
 VignetteBuilder: knitr
 URL: https://github.com/boettiger-lab/taxadb-cache
 BugReports: https://github.com/boettiger-lab/taxadb-cache/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.2
 Remotes: cboettig/prov

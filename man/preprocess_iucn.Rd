@@ -10,7 +10,7 @@ preprocess_iucn(
 )
 }
 \arguments{
-\item{url}{Original source}
+\item{url}{Source of Catalogue of Life}
 
 \item{output_paths}{paths where output will be written: must be two paths, one named dwc, one named common}
 }

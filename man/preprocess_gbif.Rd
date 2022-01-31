@@ -5,13 +5,11 @@
 \title{preprocess_gbif}
 \usage{
 preprocess_gbif(
-  url = "http://rs.gbif.org/datasets/backbone/backbone-current.zip",
+  archive,
   output_paths = c(dwc = "2019/dwc_gbif.tsv.bz2", common = "2019/common_gbif.tsv.bz2")
 )
 }
 \arguments{
-\item{url}{Original source}
-
 \item{output_paths}{paths where output will be written: must be two paths, one named dwc, one named common}
 }
 \description{
