@@ -148,11 +148,12 @@ preprocess_col <- function(archive,
   
   message("writing COL Output...\n")
 
- readr::write_tsv(dwc, output_paths[["dwc"]])
- readr::write_tsv(comm_table, output_paths[["common"]])
+ #readr::write_tsv(dwc, output_paths[["dwc"]])
+ #readr::write_tsv(comm_table, output_paths[["common"]])
  
- arrow::write_parquet(dwc, "data/dwc_col.parquet")
- arrow::write_parquet(comm_table, "data/common_col.parquet")
+  year <- lubridate::year(Sys.Date())
+ arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_col"), max_rows_per_file = 1000000L)
+ arrow::write_dataset(comm_table, glue::glue("data/{year}/common"), max_rows_per_file = 1000000L)
  
 }
 
