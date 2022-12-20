@@ -29,7 +29,6 @@ if (!has_id) {
 }
 
 output_paths <- fs::dir_ls("data/2022/dwc_col/")
-
 code <- c("R/col.R")
 prov::write_prov(data_in = path,
                  code = code, 
@@ -47,4 +46,24 @@ prov::write_prov(data_in = path,
                  issued = Sys.Date(),
                  prov="col_schema.json",
                  schema="http://schema.org")
+
+
+
+prov::write_prov(data_in = path,
+                 code = code, 
+                 data_out =  unname(output_paths),
+                 title = "Catalogue Of Life Taxonomic Names",
+                 description = "Darwin Core formatted version of Catalogue Of Life Taxonomic Names, created by rOpenSci",
+                 license = "http://creativecommons.org/licenses/by/4.0/",
+                 identifier = "https://doi.org/10.48580/dfq8",
+                 creator = list("type" = "Organization", 
+                                name = "Catalogue Of Life",
+                                url = "https://www.catalogueoflife.org/",
+                                id = "https://www.catalogueoflife.org/"),
+                 version = "22",
+                 issued = Sys.Date(),
+                 prov="col_schema.json",
+                 schema="http://schema.org",
+                 append=FALSE)
+
 
