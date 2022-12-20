@@ -1,7 +1,4 @@
-library(duckdb)
-library(DBI)
-library(glue)
-library(dplyr)
+
 
 # http-based locations need full paths, no globbing
 base <- "https://github.com/boettiger-lab/taxadb-cache/raw/master/data"
@@ -51,10 +48,10 @@ duckdb_tbl <- function(urls, tblname = paste0("z",rlang::hash(urls))) {
   dplyr::tbl(conn, tblname)
 }
 
-paths <- resolve_ids("col_schema.json")
-col <- duckdb_tbl(paths)
+#paths <- resolve_ids("col_schema.json")
+#col <- duckdb_tbl(paths)
 
-bench::bench_time( 
-print(col |> filter(scientificName == "Homo sapiens"))
-)
+#bench::bench_time( 
+#print(col |> filter(scientificName == "Homo sapiens"))
+#)
 
