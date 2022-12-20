@@ -5,7 +5,7 @@ library(Hmisc)
 devtools::load_all()
 
 
-in_url <- "http://files.opentreeoflife.org/ott/ott3.3/ott3.3.tgz"
+in_url <- "http://files.opentreeoflife.org/ott/ott3.4/ott3.4.tgz"
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
 path <- file.path("data", basename(in_url))

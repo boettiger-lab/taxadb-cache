@@ -3,7 +3,7 @@ library(prov)
 library(tidyverse)
 library(Hmisc)
 devtools::load_all()
-in_url <- "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2021-12-01.zip"
+in_url <- "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2022-12-01.zip"
 
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)

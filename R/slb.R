@@ -117,7 +117,12 @@ preprocess_slb <- function(output_paths = c(dwc = "2019/dwc_slb.tsv.bz2",
 
   write_tsv(dwc_slb, output_paths["dwc"])
   write_tsv(common, output_paths["common"])
-
+  
+  year <- lubridate::year(Sys.Date())
+  arrow::write_dataset(ungroup(dwc_slb), glue::glue("data/{year}/dwc_slb"), max_rows_per_file = 200000L)
+  arrow::write_dataset(ungroup(common), glue::glue("data/{year}/common_slb"), max_rows_per_file = 200000L)
+  
+  
   file_hash(output_paths)
 }
 

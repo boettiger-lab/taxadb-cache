@@ -12,7 +12,7 @@
 #' @importFrom stats family setNames
 #' @importFrom utils download.file untar unzip
 #' @details NOTE: A list of  all snapshots available from: http://www.catalogueoflife.org/DCA_Export/archive.php
-preprocess_col <- function(archive,
+preprocess_col <- function(archive = "data/2022_dwca.zip",
                            output_paths = c(dwc = "data/dwc_col.tsv.gz",
                                             common = "data/common_col.tsv.gz",
                                             dwc_parquet = "data/dwc_col.parquet",
@@ -148,12 +148,12 @@ preprocess_col <- function(archive,
   
   message("writing COL Output...\n")
 
- #readr::write_tsv(dwc, output_paths[["dwc"]])
- #readr::write_tsv(comm_table, output_paths[["common"]])
+ readr::write_tsv(dwc, output_paths[["dwc"]])
+ readr::write_tsv(comm_table, output_paths[["common"]])
  
   year <- lubridate::year(Sys.Date())
- arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_col"), max_rows_per_file = 1000000L)
- arrow::write_dataset(comm_table, glue::glue("data/{year}/common"), max_rows_per_file = 1000000L)
+ arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_col"), max_rows_per_file = 200000L)
+ arrow::write_dataset(comm_table, glue::glue("data/{year}/common"), max_rows_per_file = 200000L)
  
 }
 

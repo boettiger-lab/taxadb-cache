@@ -251,18 +251,20 @@ preprocess_ncbi <- function(archive,
   message("clean names -- (doesn't support remote tables)")
   dwc <- dwc %>% collect() %>%
     mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
-           scientificName = clean_names(scientificName, lowercase=FALSE))
+           scientificName = clean_names(scientificName, lowercase=FALSE)) |>
+    ungroup()
   
   #DBI::dbExecute(db, "COPY (SELECT * FROM <TABLENAME>) TO 'tablename.parquet' (FORMAT 'parquet');")
   #DBI::dbExecute(db, "COPY (SELECT * FROM comm_table) TO 'common_ncbi.parquet' (FORMAT 'parquet');")
   
-  comm_table <- comm_table %>% collect()
+  comm_table <- comm_table %>% collect() |> ungroup()
   write_tsv(dwc, "data/dwc_ncbi.tsv.gz")
   write_tsv(comm_table, "data/common_ncbi.tsv.gz")
   
   
-  arrow::write_parquet(dwc, "data/dwc_ncbi.parquet")
-  arrow::write_parquet(comm_table, "data/common_ncbi.parquet")
+  year <- lubridate::year(Sys.Date())
+  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_ncbi"), max_rows_per_file = 200000L)
+  arrow::write_dataset(comm_table, glue::glue("data/{year}/common_ncbi"), max_rows_per_file = 200000L)
   
   
   file_hash(output_paths)

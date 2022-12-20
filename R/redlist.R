@@ -51,4 +51,11 @@ redlist <- function(){
   ## category is obviously not a dwc term, but seems valuable/convenient enough to be retained
   dwc
 
+  
+  
+  year <- lubridate::year(Sys.Date())
+  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_redlist"), max_rows_per_file = 200000L)
+
+  
+  
 }

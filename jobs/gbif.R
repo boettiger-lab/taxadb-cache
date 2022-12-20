@@ -7,7 +7,7 @@ devtools::load_all()
 ## GBIF 
 rm(list=ls())
 
-in_url <- "https://hosted-datasets.gbif.org/datasets/backbone/2021-11-26/backbone.zip"
+in_url <- "https://hosted-datasets.gbif.org/datasets/backbone/2022-11-23/backbone.zip"
 id <- contentid::store(in_url)
 
 ## sometimes gbif has download issues

@@ -201,7 +201,8 @@ preprocess_itis <- function(archive,
   
   ## Sanitize characters
   dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
-                        scientificName = clean_names(scientificName, lowercase=FALSE))
+                        scientificName = clean_names(scientificName, lowercase=FALSE)) |>
+    ungroup()
   
   
   
@@ -209,7 +210,8 @@ preprocess_itis <- function(archive,
   common <-  vern %>%
     select(-approved_ind, -vern_id) %>%
     inner_join(dwc %>% select(-vernacularName, -update_date)) %>%
-    rename(vernacularName = vernacular_name)
+    rename(vernacularName = vernacular_name) |>
+    ungroup()
 
 
   dir.create(dirname(output_paths["dwc"]), FALSE)
@@ -217,8 +219,11 @@ preprocess_itis <- function(archive,
   write_tsv(dwc, "data/dwc_itis.tsv.gz")
   write_tsv(common, "data/common_itis.tsv.gz")
   
-  arrow::write_parquet(as.data.frame(dwc), "data/dwc_itis.parquet")
-  arrow::write_parquet(as.data.frame(common), "data/common_itis.parquet")
+  
+  year <- lubridate::year(Sys.Date())
+  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_itis"), max_rows_per_file = 200000L)
+  arrow::write_dataset(common, glue::glue("data/{year}/common_itis"), max_rows_per_file = 200000L)
+  
   
   #write_tsv(dwc, output_paths["dwc"])
   #write_tsv(common, output_paths["common"])

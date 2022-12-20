@@ -5,7 +5,7 @@ library(Hmisc)
 library(fs)
 devtools::load_all()
 
-in_url <- "https://download.catalogueoflife.org/col/monthly/2021-12-18_dwca.zip"
+in_url <- "https://download.checklistbank.org/col/annual/2022_dwca.zip"
 #in_url <- paste0("http://www.catalogueoflife.org/DCA_Export/zip-fixed/", 2021, "-annual.zip")
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
@@ -16,8 +16,8 @@ if(!fs::link_exists(path))
 
 output_paths <- c(dwc = "data/dwc_col.tsv.gz",
                   common = "data/common_col.tsv.gz",
-                  dwc_parquet = "data/dwc_col.parquet",
-                  common_parquet = "data/common_col.parquet")
+                  dwc_parquet = "data/dwc_col",
+                  common_parquet = "data/common_col")
 
 # hash-based memoizer for file-based workflow
 has_id <- FALSE

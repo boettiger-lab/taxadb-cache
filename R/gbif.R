@@ -89,10 +89,16 @@ preprocess_gbif <- function(archive,
   dwc <- dwc %>% mutate(vernacularName = clean_names(vernacularName, lowercase=FALSE),
                         scientificName = clean_names(scientificName, lowercase=FALSE))
 
+  dwc <- dwc |> ungroup()
+  comm_names <- comm_names |> ungroup()
   dir.create(dirname(output_paths[["dwc"]]), FALSE)
   write_tsv(dwc, output_paths[["dwc"]])
   write_tsv(comm_names, output_paths[["common"]])
 
+  year <- lubridate::year(Sys.Date())
+  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_gbif"), max_rows_per_file = 200000L)
+  arrow::write_dataset(comm_names, glue::glue("data/{year}/common_gbif"), max_rows_per_file = 200000L)
+  
   file_hash(output_paths)
   list(dwc, comm_names)
 }
