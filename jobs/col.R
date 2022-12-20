@@ -14,10 +14,7 @@ if(!fs::link_exists(path))
   path <- fs::link_create(in_file, path)
 
 
-output_paths <- c(dwc = "data/dwc_col.tsv.gz",
-                  common = "data/common_col.tsv.gz",
-                  dwc_parquet = "data/dwc_col",
-                  common_parquet = "data/common_col")
+
 
 # hash-based memoizer for file-based workflow
 has_id <- FALSE
@@ -28,25 +25,26 @@ if (fs::file_exists("col_schema.json")) {
 }
 
 if (!has_id) {
-  preprocess_col(path, output_paths = output_paths)
+  preprocess_col(path)
 }
 
+output_paths <- fs::dir_ls("data/2022/dwc_col/")
 
-code <- c("R/col.R","R/helper-routines.R", "jobs/col.R")
+code <- c("R/col.R")
 prov::write_prov(data_in = path,
                  code = code, 
                  data_out =  unname(output_paths),
                  title = "Catalogue Of Life Taxonomic Names",
                  description = "Darwin Core formatted version of Catalogue Of Life Taxonomic Names, created by rOpenSci",
                  license = "http://creativecommons.org/licenses/by/4.0/",
-                 identifier = "https://doi.org/10.48580/d4t4",
+                 identifier = "https://doi.org/10.48580/dfq8",
                  url = "https://www.catalogueoflife.org/",
                  creator = list("type" = "Organization", 
                                 name = "Catalogue Of Life",
                                 url = "https://www.catalogueoflife.org/",
                                 id = "https://www.catalogueoflife.org/"),
-                 version = "21.12",
-                 issued = "2021-12-18",
+                 version = "22",
+                 issued = Sys.Date(),
                  prov="col_schema.json",
                  schema="http://schema.org")
 
