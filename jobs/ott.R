@@ -37,10 +37,14 @@ arrow::write_parquet(tbls$dwc, output_paths$dwc_parquet)
 
 
 
-code <- c("R/ott.R","R/helper-routines.R", "jobs/ott.R")
-prov::write_prov(data_in = path,
-                 code = code, 
-                 data_out =  unname(output_paths),
+#code <- c("R/ott.R","R/helper-routines.R", "jobs/ott.R")
+
+output_paths <- c(fs::dir_ls("data/2022/dwc_ott", recurse = TRUE)) |> unname()
+output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                      output_paths)
+prov::write_prov(#data_in = path,
+                 #code = code, 
+                 data_out = output_urls,
                  title = "OpenTree Taxonomy",
                  description = "Darwin Core formatted version of Open Tree of Life Taxonomic Names, created by rOpenSci",
                  license = "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
@@ -49,9 +53,9 @@ prov::write_prov(data_in = path,
                                 name = "Open Tree Of Life",
                                 url = "https://opentreeoflife.org",
                                 id = "https://opentreeoflife.org"),
-                 version = "21.12",
-                 issued = "2021-06-01",
+                 version = "22.12",
+                 issued = "2022-12-01",
                  prov="ott_schema.json",
-                 append=TRUE,
+                 append=FALSE,
                  schema="http://schema.org")
 

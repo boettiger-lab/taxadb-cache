@@ -32,14 +32,21 @@ if (fs::file_exists("gbif_schema.json")) {
 }
 
 if (!has_id) {
-  gbif <- preprocess_gbif(path, output_paths = output_paths)
+  gbif <- preprocess_gbif(path)
 }
 
+
+output_paths <- c(fs::dir_ls("data/2022/dwc_gbif", recurse = TRUE),
+                  fs::dir_ls("data/2022/common_gbif", recurse = TRUE)) |> unname()
+output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                      output_paths)
+
+
 ## And publish provenance
-code <- c("R/gbif.R","R/helper-routines.R", "jobs/gbif.R")
-prov::write_prov(data_in = path,
-                 code = code,
-                 data_out =  unname(output_paths),
+#code <- c("R/gbif.R","R/helper-routines.R", "jobs/gbif.R")
+prov::write_prov(#data_in = in_url,
+                # code = code,
+                 data_out =  output_urls,
                  title = "GBIF Taxonomic Name Backbone",
                  description = "Darwin Core formatted version of GBIF Taxonomy, created by rOpenSci",
                  license = "http://creativecommons.org/licenses/by/4.0/legalcode",
@@ -47,8 +54,8 @@ prov::write_prov(data_in = path,
                                 name = "GBIF", 
                                 id = "https://www.gbif.org",
                                 url= "https://www.gbif.org"),
-                 version = "21.12",
-                 issued = "2021-11-26",
+                 version = "22.12",
+                 dateCreated = "2022-11-26",
                  url = "https://www.gbif.org",
                  identifier = "https://doi.org/10.15468/39omei",
                  prov="gbif_schema.json", 

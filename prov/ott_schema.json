@@ -1,0 +1,461 @@
+{
+  "@context": "http://schema.org/",
+  "type": "Dataset",
+  "id": "urn:uuid:8b77dc49-28d5-4fda-948b-7b81177d0a71",
+  "name": "OpenTree Taxonomy",
+  "description": "Darwin Core formatted version of Open Tree of Life Taxonomic Names, created by rOpenSci",
+  "creator": {
+    "type": "Organization",
+    "name": "Open Tree Of Life",
+    "url": "https://opentreeoflife.org",
+    "id": "https://opentreeoflife.org"
+  },
+  "dateCreated": "2022-12-01",
+  "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+  "distribution": [
+    {
+      "id": "hash://sha256/e21e868552e2cf77c08f998fbc1f378be77dfe7d7b86c02eb64ff107fdea2f04",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/e21e868552e2cf77c08f998fbc1f378be77dfe7d7b86c02eb64ff107fdea2f04"],
+        ["hash://md5/b64575ab29ad4dba1503fbd909bddd94"]
+      ],
+      "name": "part-0.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5193560,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-0.parquet"
+    },
+    {
+      "id": "hash://sha256/38506e5c321c32d1c9b53b2360936c90c26cb39f1ccb1954b51bf962a2c720d2",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/38506e5c321c32d1c9b53b2360936c90c26cb39f1ccb1954b51bf962a2c720d2"],
+        ["hash://md5/35504c36128ef0745a4d8f609c6beab7"]
+      ],
+      "name": "part-1.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 6145473,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-1.parquet"
+    },
+    {
+      "id": "hash://sha256/f27ee93a5dbf1b11ff33922a65c97e19c6079c96d72975ff9c9b122d62ba167e",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/f27ee93a5dbf1b11ff33922a65c97e19c6079c96d72975ff9c9b122d62ba167e"],
+        ["hash://md5/03457cc0a8448c2053ff20ca310e9f0f"]
+      ],
+      "name": "part-10.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5763120,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-10.parquet"
+    },
+    {
+      "id": "hash://sha256/c1d65dad492d5f1b38e7e5f428e390473a781c2d166a293609e5f927fb5fd72b",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/c1d65dad492d5f1b38e7e5f428e390473a781c2d166a293609e5f927fb5fd72b"],
+        ["hash://md5/b8f9159accab886da6d172245b4d7895"]
+      ],
+      "name": "part-11.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5589195,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-11.parquet"
+    },
+    {
+      "id": "hash://sha256/5074b77ffe29350bb76486f5a349338b019502bad456c6822dd9f25db87a7ded",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/5074b77ffe29350bb76486f5a349338b019502bad456c6822dd9f25db87a7ded"],
+        ["hash://md5/5bf4c5cc8924fd23aee0d84027179a03"]
+      ],
+      "name": "part-12.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5580335,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-12.parquet"
+    },
+    {
+      "id": "hash://sha256/fc02e51beb0d28f283d348233904cc2578f9a3cee72f2eee873a4bebf6c9ec41",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/fc02e51beb0d28f283d348233904cc2578f9a3cee72f2eee873a4bebf6c9ec41"],
+        ["hash://md5/87698c75cbd8fd814f255f006583b12b"]
+      ],
+      "name": "part-13.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5645433,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-13.parquet"
+    },
+    {
+      "id": "hash://sha256/0626655b2b9a05989dd7b0cc9cd24f6d2a6bcca37bdeebb08000fa8e27081984",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/0626655b2b9a05989dd7b0cc9cd24f6d2a6bcca37bdeebb08000fa8e27081984"],
+        ["hash://md5/9c08188c5d06772b3c5e17e2c37c47e3"]
+      ],
+      "name": "part-14.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5969441,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-14.parquet"
+    },
+    {
+      "id": "hash://sha256/5c235459401b5127116f16fee7528b70ac92683376ed1d13336379bcecf38952",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/5c235459401b5127116f16fee7528b70ac92683376ed1d13336379bcecf38952"],
+        ["hash://md5/048d4c9869e3d3f79f7ce9ee1a8989e1"]
+      ],
+      "name": "part-15.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5802797,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-15.parquet"
+    },
+    {
+      "id": "hash://sha256/f7b130edb8c572d72a6a2695929ccf3fe0c745570eea22d436a25629eef37ad1",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/f7b130edb8c572d72a6a2695929ccf3fe0c745570eea22d436a25629eef37ad1"],
+        ["hash://md5/a6bf7a3f6354db7796d314c89d0db1d3"]
+      ],
+      "name": "part-16.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5618832,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-16.parquet"
+    },
+    {
+      "id": "hash://sha256/73acb5ade172342fb0fd8d7f80048ce791ebd7ed1215c1208ca22713245422bf",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/73acb5ade172342fb0fd8d7f80048ce791ebd7ed1215c1208ca22713245422bf"],
+        ["hash://md5/a5d9a7fa701a961272f514cf2038116f"]
+      ],
+      "name": "part-17.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5414965,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-17.parquet"
+    },
+    {
+      "id": "hash://sha256/a02c4c7405b704512cc88ae68ebf559fe5ed33832dac2f68c5a3c07b0f31fa1d",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/a02c4c7405b704512cc88ae68ebf559fe5ed33832dac2f68c5a3c07b0f31fa1d"],
+        ["hash://md5/291a238dbe0a5f1c501f51f8f544cc1d"]
+      ],
+      "name": "part-18.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5729242,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-18.parquet"
+    },
+    {
+      "id": "hash://sha256/45924fe53b55e8b303ed9ed1ce32c72cf6aca00b0bab0c0f4a51bcdbcbbad0bd",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/45924fe53b55e8b303ed9ed1ce32c72cf6aca00b0bab0c0f4a51bcdbcbbad0bd"],
+        ["hash://md5/487ebf0c857e2f634cbcda38ac53f772"]
+      ],
+      "name": "part-19.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5866704,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-19.parquet"
+    },
+    {
+      "id": "hash://sha256/1cc7c7e1f0840d24826f9e64b4df4043e2f8d501ad8ca3607487da0b515304bd",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/1cc7c7e1f0840d24826f9e64b4df4043e2f8d501ad8ca3607487da0b515304bd"],
+        ["hash://md5/fe1fe6bc27c8e747acf1de5a6e2e6d65"]
+      ],
+      "name": "part-2.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5451943,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-2.parquet"
+    },
+    {
+      "id": "hash://sha256/49fae7e38e33a3c3685b3c91d49f2893366be3b5c10192b6ca448ec2a3056a57",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/49fae7e38e33a3c3685b3c91d49f2893366be3b5c10192b6ca448ec2a3056a57"],
+        ["hash://md5/15b7b5b3a9ea2ac7496551647d956fa9"]
+      ],
+      "name": "part-20.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5487831,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-20.parquet"
+    },
+    {
+      "id": "hash://sha256/24ae29692d6338339f67db089c1f8fa97b68b9f7bbb6f2afd99841753b351049",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/24ae29692d6338339f67db089c1f8fa97b68b9f7bbb6f2afd99841753b351049"],
+        ["hash://md5/d21dde8bd0aaead1106c960b9b2910e4"]
+      ],
+      "name": "part-21.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5796106,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-21.parquet"
+    },
+    {
+      "id": "hash://sha256/e2537236844babb006b02e0c417df3626e1211a670aae3606ac327f16a9083cb",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/e2537236844babb006b02e0c417df3626e1211a670aae3606ac327f16a9083cb"],
+        ["hash://md5/5f272f9cedf17f220ee97c3d464e333b"]
+      ],
+      "name": "part-22.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5719548,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-22.parquet"
+    },
+    {
+      "id": "hash://sha256/608e803b5707e4ea24e942413d855e2d73f363cc5c2989910c1e52c44c766285",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/608e803b5707e4ea24e942413d855e2d73f363cc5c2989910c1e52c44c766285"],
+        ["hash://md5/28bde2510073ed32be811252f3520e7c"]
+      ],
+      "name": "part-23.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5740181,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-23.parquet"
+    },
+    {
+      "id": "hash://sha256/ca3c1891650e0170048d727e9cacce6d53e5848da4eb2bbfdb9a0c76a3f43ef5",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/ca3c1891650e0170048d727e9cacce6d53e5848da4eb2bbfdb9a0c76a3f43ef5"],
+        ["hash://md5/65a24ce0385a6925750896c4ce26bd5b"]
+      ],
+      "name": "part-24.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5582541,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-24.parquet"
+    },
+    {
+      "id": "hash://sha256/4bc12a4d7d9427e8dbdcc46caed3534fa67854f2e7f774a29cff19a7dd3db269",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/4bc12a4d7d9427e8dbdcc46caed3534fa67854f2e7f774a29cff19a7dd3db269"],
+        ["hash://md5/5c204eccef3b17b696cc7fc054edc017"]
+      ],
+      "name": "part-25.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5696074,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-25.parquet"
+    },
+    {
+      "id": "hash://sha256/40b07447fd2492dcbed1d1f81befe7ddff6f7650bb7b7f782619c12bcbeb5bdd",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/40b07447fd2492dcbed1d1f81befe7ddff6f7650bb7b7f782619c12bcbeb5bdd"],
+        ["hash://md5/3503c1c7a0790554fbebf3546e6d5f55"]
+      ],
+      "name": "part-26.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5788106,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-26.parquet"
+    },
+    {
+      "id": "hash://sha256/d3f9b898e898c43318258dd26d9e8467e635ea6cfa64117af4cb608eced5538f",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/d3f9b898e898c43318258dd26d9e8467e635ea6cfa64117af4cb608eced5538f"],
+        ["hash://md5/3cc76c35d50ecad056118a1fddff7184"]
+      ],
+      "name": "part-27.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5727747,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-27.parquet"
+    },
+    {
+      "id": "hash://sha256/4e9e23f65f6cf94cb39b4e971e45a9d72cf6bbc12cae3d5ef47281e1b436c5c5",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/4e9e23f65f6cf94cb39b4e971e45a9d72cf6bbc12cae3d5ef47281e1b436c5c5"],
+        ["hash://md5/59462a8791d6482331b243d367acfeef"]
+      ],
+      "name": "part-28.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5067630,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-28.parquet"
+    },
+    {
+      "id": "hash://sha256/4a62dd66ef007acb4d8f12232d1b7e343ef5830b07f314e017255005f3f40684",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/4a62dd66ef007acb4d8f12232d1b7e343ef5830b07f314e017255005f3f40684"],
+        ["hash://md5/beee276a7fc0ed3e61aa942f42c44744"]
+      ],
+      "name": "part-29.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 4357798,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-29.parquet"
+    },
+    {
+      "id": "hash://sha256/dd7718c6bdec9c62b4c7c2c1561ab596a0fe7fc67d13283f7cac83a51e22c6a3",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/dd7718c6bdec9c62b4c7c2c1561ab596a0fe7fc67d13283f7cac83a51e22c6a3"],
+        ["hash://md5/b2ec91f10b28de00861b3700d038d735"]
+      ],
+      "name": "part-3.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5904403,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-3.parquet"
+    },
+    {
+      "id": "hash://sha256/78ec91d4e54e7bf083578c958d962049e8d687327c04ce8f294cdb43749c8696",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/78ec91d4e54e7bf083578c958d962049e8d687327c04ce8f294cdb43749c8696"],
+        ["hash://md5/eacd8c4a493c6baaf15098d44ef1f1a6"]
+      ],
+      "name": "part-30.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 4220975,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-30.parquet"
+    },
+    {
+      "id": "hash://sha256/fe99fac16e9a9dddcd9afd8b4def6a3a1382517fae1ef6ca140196dd9d746786",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/fe99fac16e9a9dddcd9afd8b4def6a3a1382517fae1ef6ca140196dd9d746786"],
+        ["hash://md5/eef54b6b1a72c7a0398c3043dc41dded"]
+      ],
+      "name": "part-31.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5597716,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-31.parquet"
+    },
+    {
+      "id": "hash://sha256/4d7fbba4df518141340126df18600f12b105d1db228e8ca8742a65cfcc17fb3b",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/4d7fbba4df518141340126df18600f12b105d1db228e8ca8742a65cfcc17fb3b"],
+        ["hash://md5/0e8c6007d12fb72dc2336d9a686f6826"]
+      ],
+      "name": "part-32.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 6445991,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-32.parquet"
+    },
+    {
+      "id": "hash://sha256/5b3cd21e45530771c24ecb795a2892013e4b5b476e30e4ab5986fe891323ae75",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/5b3cd21e45530771c24ecb795a2892013e4b5b476e30e4ab5986fe891323ae75"],
+        ["hash://md5/3c5cdedcbaeb6ab7b240f40815d54b1f"]
+      ],
+      "name": "part-33.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5015661,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-33.parquet"
+    },
+    {
+      "id": "hash://sha256/df8a3d99f7b89e6d44911399283ec49a6ac02f4637fb0a022b3543b6a7bf52b5",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/df8a3d99f7b89e6d44911399283ec49a6ac02f4637fb0a022b3543b6a7bf52b5"],
+        ["hash://md5/abb512c0b7684bd660f5e9ad5bc88af0"]
+      ],
+      "name": "part-4.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5582228,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-4.parquet"
+    },
+    {
+      "id": "hash://sha256/1a0cda5e0e580126d4ab7b3a517d546266f24e6ee77bb4ce39270b8747f5ff5e",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/1a0cda5e0e580126d4ab7b3a517d546266f24e6ee77bb4ce39270b8747f5ff5e"],
+        ["hash://md5/825dc602afd8d29c14c429bdc6ba9b7a"]
+      ],
+      "name": "part-5.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5285261,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-5.parquet"
+    },
+    {
+      "id": "hash://sha256/6b4122cb5a737a737a91c530c17d5c7d83e09a6c5ea80a8ddcf1aad9bec32860",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/6b4122cb5a737a737a91c530c17d5c7d83e09a6c5ea80a8ddcf1aad9bec32860"],
+        ["hash://md5/055d4f794c787023eee0a95cc9482489"]
+      ],
+      "name": "part-6.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5606647,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-6.parquet"
+    },
+    {
+      "id": "hash://sha256/9962349e025aba7664def18fbd8f6c1aa187de7d543bc2d1b3c75d4e0d5d71f5",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/9962349e025aba7664def18fbd8f6c1aa187de7d543bc2d1b3c75d4e0d5d71f5"],
+        ["hash://md5/ca9d5e8e9506340ac53082ba37c24ed0"]
+      ],
+      "name": "part-7.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5556693,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-7.parquet"
+    },
+    {
+      "id": "hash://sha256/18278a5732f68471f3d5de2302c9d994e8f12a70247d6e597e824a1bef3d366e",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/18278a5732f68471f3d5de2302c9d994e8f12a70247d6e597e824a1bef3d366e"],
+        ["hash://md5/bb751a955f31f6456ce1101013dea4e2"]
+      ],
+      "name": "part-8.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5535863,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-8.parquet"
+    },
+    {
+      "id": "hash://sha256/4e0ab12cb4ccb81b3df9e2fa956a46191b229987ab8abad39d2947e971c1a708",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/4e0ab12cb4ccb81b3df9e2fa956a46191b229987ab8abad39d2947e971c1a708"],
+        ["hash://md5/755be78a6cac3c0f98a191c60d7ae3d4"]
+      ],
+      "name": "part-9.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 5742432,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_ott/part-9.parquet"
+    }
+  ],
+  "url": "https://files.opentreeoflife.org/ott",
+  "version": "22.12"
+}
