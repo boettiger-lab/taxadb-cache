@@ -230,7 +230,7 @@
           "name": "part-1.parquet"
         }
       ],
-      "name": "NCBI Taxonomic Names",
+      "name": "ncbi",
       "url": "https://www.ncbi.nlm.nih.gov/taxonomy",
       "version": "22.12"
     },
@@ -520,7 +520,7 @@
         }
       ],
       "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
-      "name": "OpenTree Taxonomy",
+      "name": "ott",
       "url": "https://files.opentreeoflife.org/ott",
       "version": "22.12"
     },
@@ -531,7 +531,6 @@
         "id": "https://www.gbif.org"
       },
       "dateCreated": "2023-02-08",
-      "dateCreated.1": "2022-11-26",
       "description": "Darwin Core formatted version of GBIF Taxonomy, created by rOpenSci",
       "distribution": [
         {
@@ -833,7 +832,7 @@
       ],
       "identifier": "https://doi.org/10.15468/39omei",
       "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
-      "name": "GBIF Taxonomic Name Backbone",
+      "name": "gbif",
       "url": {
         "id": "https://www.gbif.org",
         "type": "Organization",
@@ -913,7 +912,7 @@
       ],
       "identifier": "https://doi.org/10.5066/F7KH0KBK",
       "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
-      "name": "Integrated Taxonomic Information System (ITIS)",
+      "name": "itis",
       "url": "https://itis.gov",
       "version": "22.12"
     },
@@ -1121,7 +1120,7 @@
       ],
       "identifier": "https://doi.org/10.48580/dfq8",
       "license": "http://creativecommons.org/licenses/by/4.0/",
-      "name": "Catalogue Of Life Taxonomic Names",
+      "name": "col",
       "url": {
         "id": "https://www.catalogueoflife.org/",
         "type": "Organization",

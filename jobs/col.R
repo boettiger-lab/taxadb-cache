@@ -34,10 +34,10 @@ output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/
                       output_paths)
 
 #code <- c("R/col.R")
-prov::write_prov(data_in = in_url,
+prov::write_prov(#data_in = in_url,
 #                 code = code, 
                  data_out =  output_urls,
-                 title = "Catalogue Of Life Taxonomic Names",
+                 title = "col",
                  description = "Darwin Core formatted version of Catalogue Of Life Taxonomic Names, created by rOpenSci",
                  license = "http://creativecommons.org/licenses/by/4.0/",
                  identifier = "https://doi.org/10.48580/dfq8",

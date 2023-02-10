@@ -45,7 +45,7 @@ output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/
 prov::write_prov(#data_in = path,
                  #code = code, 
                  data_out = output_urls,
-                 title = "OpenTree Taxonomy",
+                 title = "ott",
                  description = "Darwin Core formatted version of Open Tree of Life Taxonomic Names, created by rOpenSci",
                  license = "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
                  url = "https://files.opentreeoflife.org/ott",

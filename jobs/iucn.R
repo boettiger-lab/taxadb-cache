@@ -16,7 +16,7 @@ output_paths = c("data/dwc_iucn.tsv.gz","data/dwc_iucn.parquet")
 
 prov::write_prov(code = code, 
                  data_out =  unname(output_paths),
-                 title = "IUCN Redlist Taxonomy",
+                 title = "iucn",
                  description = "Darwin Core formatted version of IUCN Redlist Taxonomic Names, created by rOpenSci",
                  license = "https://www.iucnredlist.org/terms/terms-of-use#2.%20Copyrights_Ownership",
                  url = "https://www.iucnredlist.org",
