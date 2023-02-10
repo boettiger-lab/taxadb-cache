@@ -36,18 +36,14 @@ if (!has_id) {
 }
 
 
-output_paths <- c(fs::dir_ls("data/2022/dwc_gbif", recurse = TRUE),
-                  fs::dir_ls("data/2022/common_gbif", recurse = TRUE)) |> unname()
-output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
-                      output_paths)
-
 
 ## And publish provenance
 #code <- c("R/gbif.R","R/helper-routines.R", "jobs/gbif.R")
 prov::write_prov(#data_in = in_url,
                 # code = code,
-                 data_out =  output_urls,
-                 title = "gbif",
+                 data_out =  paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                                    fs::dir_ls("data/2022/dwc_gbif", recurse = TRUE)),
+                 title = "v22.12_dwc_gbif",
                  description = "Darwin Core formatted version of GBIF Taxonomic Names Backbone, created by rOpenSci",
                  license = "http://creativecommons.org/licenses/by/4.0/legalcode",
                  creator = list("type" = "Organization", 
@@ -55,11 +51,37 @@ prov::write_prov(#data_in = in_url,
                                 id = "https://www.gbif.org",
                                 url= "https://www.gbif.org"),
                  version = "22.12",
-                 dateCreated = "2022-11-26",
+                 issued = "2022-11-26",
                  url = "https://www.gbif.org",
                  identifier = "https://doi.org/10.15468/39omei",
-                 prov="gbif_schema.json", 
-                 schema="http://schema.org")
+                 prov="schema.json", 
+                 schema="http://schema.org",
+                 append=TRUE)
+
+
+
+## And publish provenance
+#code <- c("R/gbif.R","R/helper-routines.R", "jobs/gbif.R")
+prov::write_prov(#data_in = in_url,
+  # code = code,
+  data_out =  paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                     fs::dir_ls("data/2022/common_gbif", recurse = TRUE)),
+  title = "v22.12_common_gbif",
+  description = "Common names from the GBIF Taxonomic Names Backbone, created by rOpenSci",
+  license = "http://creativecommons.org/licenses/by/4.0/legalcode",
+  creator = list("type" = "Organization", 
+                 name = "GBIF", 
+                 id = "https://www.gbif.org",
+                 url= "https://www.gbif.org"),
+  version = "22.12",
+  issued = "2022-11-26",
+  url = "https://www.gbif.org",
+  identifier = "https://doi.org/10.15468/39omei",
+  prov="schema.json", 
+  schema="http://schema.org",
+  append=TRUE)
+
+
 
 
 

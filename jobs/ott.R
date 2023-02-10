@@ -45,7 +45,7 @@ output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/
 prov::write_prov(#data_in = path,
                  #code = code, 
                  data_out = output_urls,
-                 title = "ott",
+                 title = "v22.12_dwc_ott",
                  description = "Darwin Core formatted version of Open Tree of Life Taxonomic Names, created by rOpenSci",
                  license = "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
                  url = "https://files.opentreeoflife.org/ott",
@@ -55,7 +55,7 @@ prov::write_prov(#data_in = path,
                                 id = "https://opentreeoflife.org"),
                  version = "22.12",
                  issued = "2022-12-01",
-                 prov="prov/ott_schema.json",
-                 append=FALSE,
+                 prov="schema.json",
+                 append=TRUE,
                  schema="http://schema.org")
 

@@ -28,16 +28,13 @@ if (!has_id) {
   preprocess_col(path)
 }
 
-output_paths <- c(fs::dir_ls("data/2022/dwc_col", recurse = TRUE),
-fs::dir_ls("data/2022/common_col", recurse = TRUE)) |> unname()
-output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
-                      output_paths)
 
 #code <- c("R/col.R")
-prov::write_prov(#data_in = in_url,
+prov::write_prov(#data_in = "https://download.checklistbank.org/col/annual/2022_dwca.zip",
 #                 code = code, 
-                 data_out =  output_urls,
-                 title = "col",
+                 data_out =  paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                                    fs::dir_ls("data/2022/dwc_col", recurse = TRUE)),
+                 title = "v22.12_dwc_col",
                  description = "Darwin Core formatted version of Catalogue Of Life Taxonomic Names, created by rOpenSci",
                  license = "http://creativecommons.org/licenses/by/4.0/",
                  identifier = "https://doi.org/10.48580/dfq8",
@@ -48,9 +45,29 @@ prov::write_prov(#data_in = in_url,
                                 id = "https://www.catalogueoflife.org/"),
                  version = "22.12",
                  issued = Sys.Date(),
-                 prov="prov/col_schema.json",
-                 schema="http://schema.org")
+                 prov="schema.json",
+                 schema="http://schema.org",
+                 append=TRUE)
 
+
+prov::write_prov(#data_in = "https://download.checklistbank.org/col/annual/2022_dwca.zip",
+  #                 code = code, 
+  data_out =  paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                     fs::dir_ls("data/2022/common_col", recurse = TRUE)),
+  title = "v22.12_common_col",
+  description = "Common Names Catalogue Of Life Taxonomic Names, created by rOpenSci",
+  license = "http://creativecommons.org/licenses/by/4.0/",
+  identifier = "https://doi.org/10.48580/dfq8",
+  url = "https://www.catalogueoflife.org/",
+  creator = list("type" = "Organization", 
+                 name = "Catalogue Of Life",
+                 url = "https://www.catalogueoflife.org/",
+                 id = "https://www.catalogueoflife.org/"),
+  version = "22.12",
+  issued = Sys.Date(),
+  prov="schema.json",
+  schema="http://schema.org",
+  append=TRUE)
 
 
 

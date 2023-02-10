@@ -34,14 +34,11 @@ if (!has_id) {
 
 #code <- c("R/ncbi.R", "R/helper-routines.R", "jobs/ncbi.R")
 
-output_paths <- c(fs::dir_ls("data/2022/dwc_ncbi", recurse = TRUE),
-                  fs::dir_ls("data/2022/common_ncbi", recurse = TRUE)) |> unname()
-output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
-                      output_paths)
-prov::write_prov(#data_in = path, 
-                 #code = code,
-                 data_out = output_urls,
-                 title = "ncbi",
+
+
+prov::write_prov(data_out = paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                                   fs::dir_ls("data/2022/dwc_ncbi", recurse = TRUE)),
+                 title = "v22.12_dwc_ncbi",
                  description = "Darwin Core formatted version of NCBI Taxonomic Names, created by rOpenSci",
                  license = "Public Domain",
                  creator = list("type" = "Organization", name = "NCBI",
@@ -51,8 +48,25 @@ prov::write_prov(#data_in = path,
                  version = "22.12",
                  issued = "2022-12-01",
                  url = "https://www.ncbi.nlm.nih.gov/taxonomy",
-                 prov="prov/ncbi_schema.json",
-                 append = FALSE,
+                 prov="schema.json",
+                 append = TRUE,
+                 schema="http://schema.org")
+
+
+prov::write_prov(data_out = paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
+                                   fs::dir_ls("data/2022/common_ncbi", recurse = TRUE)),
+                 title = "v22.12_common_ncbi",
+                 description = "Common Names table derived from NCBI Taxonomic Names, created by rOpenSci",
+                 license = "Public Domain",
+                 creator = list("type" = "Organization", name = "NCBI",
+                                id = "https://www.ncbi.nlm.nih.gov",
+                                url = "https://www.ncbi.nlm.nih.gov"
+                 ),
+                 version = "22.12",
+                 issued = "2022-12-01",
+                 url = "https://www.ncbi.nlm.nih.gov/taxonomy",
+                 prov="schema.json",
+                 append = TRUE,
                  schema="http://schema.org")
 
 
