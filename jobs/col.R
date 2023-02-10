@@ -48,7 +48,7 @@ prov::write_prov(data_in = in_url,
                                 id = "https://www.catalogueoflife.org/"),
                  version = "22.12",
                  issued = Sys.Date(),
-                 prov="col_schema.json",
+                 prov="prov/col_schema.json",
                  schema="http://schema.org")
 
 

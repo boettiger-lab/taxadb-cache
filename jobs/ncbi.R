@@ -51,7 +51,7 @@ prov::write_prov(#data_in = path,
                  version = "22.12",
                  issued = "2022-12-01",
                  url = "https://www.ncbi.nlm.nih.gov/taxonomy",
-                 prov="ncbi_schema.json",
+                 prov="prov/ncbi_schema.json",
                  append = FALSE,
                  schema="http://schema.org")
 

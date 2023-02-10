@@ -1,225 +1,111 @@
 {
   "@context": "http://schema.org/",
-  "@graph": [
+  "type": "Dataset",
+  "id": "urn:uuid:ca50f89a-b468-47ed-a443-1f61b881b9ec",
+  "name": "Integrated Taxonomic Information System (ITIS)",
+  "description": "Darwin Core formatted version of ITIS Taxonomy, created by rOpenSci",
+  "creator": {
+    "type": "Organization",
+    "name": "ITIS",
+    "url": "https://itis.gov/",
+    "id": "https://itis.gov/"
+  },
+  "dateCreated": "2022-12-01",
+  "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+  "distribution": [
     {
-      "id": "urn:uuid:1140fc92-7aa9-4a09-972b-1829b9602b8c",
-      "type": "Dataset",
-      "creator": {
-        "id": "https://itis.gov/",
-        "type": "Organization",
-        "name": "ITIS",
-        "url": "https://itis.gov/"
-      },
-      "dateCreated": "2022-12-01",
-      "description": "Darwin Core formatted version of ITIS Taxonomy, created by rOpenSci",
-      "distribution": [
-        {
-          "id": "hash://sha256/7d2e54aaf2bf7dd3148cd4d9278d9fa965a404a893af976045ae015a55fb81d9",
-          "type": "DataDownload",
-          "contentSize": 7209956,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/7d2e54aaf2bf7dd3148cd4d9278d9fa965a404a893af976045ae015a55fb81d9",
-            "hash://md5/b7c7b5219d0defa8502b9643cea7ad24"
-          ],
-          "name": "part-0.parquet"
-        },
-        {
-          "id": "hash://sha256/1b01fd9aaf1c529520c7348d9cb8f06928586f6574e5d4cd8028c480266f05f4",
-          "type": "DataDownload",
-          "contentSize": 7196067,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/1b01fd9aaf1c529520c7348d9cb8f06928586f6574e5d4cd8028c480266f05f4",
-            "hash://md5/4429cb5823d610924ca22b16970930af"
-          ],
-          "name": "part-1.parquet"
-        },
-        {
-          "id": "hash://sha256/c7b788a352b51b81ffee6df0c591f2344a2c732c7fdf8724221e9a6c7a2bd9fa",
-          "type": "DataDownload",
-          "contentSize": 7401054,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/c7b788a352b51b81ffee6df0c591f2344a2c732c7fdf8724221e9a6c7a2bd9fa",
-            "hash://md5/4926d96ea11847b0b34ec82a5857961f"
-          ],
-          "name": "part-2.parquet"
-        },
-        {
-          "id": "hash://sha256/b4fb103c6e965ddc670c4dc84cfe09aa3cec490a9af3a33c5864f755e9298b78",
-          "type": "DataDownload",
-          "contentSize": 6944171,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/b4fb103c6e965ddc670c4dc84cfe09aa3cec490a9af3a33c5864f755e9298b78",
-            "hash://md5/21c64060a524bfff633a43fb4b054f42"
-          ],
-          "name": "part-3.parquet"
-        },
-        {
-          "id": "hash://sha256/72d3bbbfd2ba4263ae34caaf464a3eb4f4ce3fabe8468e7d27072ff3487cd839",
-          "type": "DataDownload",
-          "contentSize": 3638899,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/72d3bbbfd2ba4263ae34caaf464a3eb4f4ce3fabe8468e7d27072ff3487cd839",
-            "hash://md5/15bd9a8475a2087f023a3555b972a183"
-          ],
-          "name": "part-4.parquet"
-        },
-        {
-          "id": "hash://sha256/c6c88632ed8b633ee3db8bf58e8fd38064c678d46818db8a19fad98f34f60b8b",
-          "type": "DataDownload",
-          "contentSize": 4894484,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/c6c88632ed8b633ee3db8bf58e8fd38064c678d46818db8a19fad98f34f60b8b",
-            "hash://md5/11a8fec2d817fad15c845cb0fd702f64"
-          ],
-          "name": "part-0.parquet"
-        },
-        {
-          "id": "hash://sha256/f78d3b0c1704e820176d5e09c24eb002f88fa79befa5b4adc8f6ebe9d35e93ea",
-          "type": "DataDownload",
-          "contentSize": 2615546,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/f78d3b0c1704e820176d5e09c24eb002f88fa79befa5b4adc8f6ebe9d35e93ea",
-            "hash://md5/e9b5a228711720ff6dbf77789dfb8d83"
-          ],
-          "name": "part-1.parquet"
-        }
+      "id": "hash://sha256/7d2e54aaf2bf7dd3148cd4d9278d9fa965a404a893af976045ae015a55fb81d9",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/7d2e54aaf2bf7dd3148cd4d9278d9fa965a404a893af976045ae015a55fb81d9"],
+        ["hash://md5/b7c7b5219d0defa8502b9643cea7ad24"]
       ],
-      "identifier": "https://doi.org/10.5066/F7KH0KBK",
-      "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
-      "name": "Integrated Taxonomic Information System (ITIS)",
-      "url": "https://itis.gov",
-      "version": "22.12"
+      "name": "part-0.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 7209956,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_itis/part-0.parquet"
     },
     {
-      "id": "urn:uuid:fa4ddedb-c6e8-4f01-a01d-dcd1e98052f5",
-      "type": "Dataset",
-      "creator": {
-        "id": "https://itis.gov/",
-        "type": "Organization",
-        "name": "ITIS",
-        "url": "https://itis.gov/"
-      },
-      "dateCreated": "2022-12-01",
-      "description": "Darwin Core formatted version of ITIS Taxonomy, created by rOpenSci",
-      "distribution": [
-        {
-          "id": "hash://sha256/7d2e54aaf2bf7dd3148cd4d9278d9fa965a404a893af976045ae015a55fb81d9",
-          "type": "DataDownload",
-          "contentSize": 7209956,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/7d2e54aaf2bf7dd3148cd4d9278d9fa965a404a893af976045ae015a55fb81d9",
-            "hash://md5/b7c7b5219d0defa8502b9643cea7ad24"
-          ],
-          "name": "part-0.parquet"
-        },
-        {
-          "id": "hash://sha256/1b01fd9aaf1c529520c7348d9cb8f06928586f6574e5d4cd8028c480266f05f4",
-          "type": "DataDownload",
-          "contentSize": 7196067,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/1b01fd9aaf1c529520c7348d9cb8f06928586f6574e5d4cd8028c480266f05f4",
-            "hash://md5/4429cb5823d610924ca22b16970930af"
-          ],
-          "name": "part-1.parquet"
-        },
-        {
-          "id": "hash://sha256/c7b788a352b51b81ffee6df0c591f2344a2c732c7fdf8724221e9a6c7a2bd9fa",
-          "type": "DataDownload",
-          "contentSize": 7401054,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/c7b788a352b51b81ffee6df0c591f2344a2c732c7fdf8724221e9a6c7a2bd9fa",
-            "hash://md5/4926d96ea11847b0b34ec82a5857961f"
-          ],
-          "name": "part-2.parquet"
-        },
-        {
-          "id": "hash://sha256/b4fb103c6e965ddc670c4dc84cfe09aa3cec490a9af3a33c5864f755e9298b78",
-          "type": "DataDownload",
-          "contentSize": 6944171,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/b4fb103c6e965ddc670c4dc84cfe09aa3cec490a9af3a33c5864f755e9298b78",
-            "hash://md5/21c64060a524bfff633a43fb4b054f42"
-          ],
-          "name": "part-3.parquet"
-        },
-        {
-          "id": "hash://sha256/72d3bbbfd2ba4263ae34caaf464a3eb4f4ce3fabe8468e7d27072ff3487cd839",
-          "type": "DataDownload",
-          "contentSize": 3638899,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/72d3bbbfd2ba4263ae34caaf464a3eb4f4ce3fabe8468e7d27072ff3487cd839",
-            "hash://md5/15bd9a8475a2087f023a3555b972a183"
-          ],
-          "name": "part-4.parquet"
-        },
-        {
-          "id": "hash://sha256/c6c88632ed8b633ee3db8bf58e8fd38064c678d46818db8a19fad98f34f60b8b",
-          "type": "DataDownload",
-          "contentSize": 4894484,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/c6c88632ed8b633ee3db8bf58e8fd38064c678d46818db8a19fad98f34f60b8b",
-            "hash://md5/11a8fec2d817fad15c845cb0fd702f64"
-          ],
-          "name": "part-0.parquet"
-        },
-        {
-          "id": "hash://sha256/f78d3b0c1704e820176d5e09c24eb002f88fa79befa5b4adc8f6ebe9d35e93ea",
-          "type": "DataDownload",
-          "contentSize": 2615546,
-          "dateCreated": "2022-12-19",
-          "description": "output data",
-          "encodingFormat": "application/vnd.apache.parquet",
-          "identifier": [
-            "hash://sha256/f78d3b0c1704e820176d5e09c24eb002f88fa79befa5b4adc8f6ebe9d35e93ea",
-            "hash://md5/e9b5a228711720ff6dbf77789dfb8d83"
-          ],
-          "name": "part-1.parquet"
-        }
+      "id": "hash://sha256/1b01fd9aaf1c529520c7348d9cb8f06928586f6574e5d4cd8028c480266f05f4",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/1b01fd9aaf1c529520c7348d9cb8f06928586f6574e5d4cd8028c480266f05f4"],
+        ["hash://md5/4429cb5823d610924ca22b16970930af"]
       ],
-      "identifier": "https://doi.org/10.5066/F7KH0KBK",
-      "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
-      "name": "Integrated Taxonomic Information System (ITIS)",
-      "url": "https://itis.gov",
-      "version": "22.12"
+      "name": "part-1.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 7196067,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_itis/part-1.parquet"
+    },
+    {
+      "id": "hash://sha256/c7b788a352b51b81ffee6df0c591f2344a2c732c7fdf8724221e9a6c7a2bd9fa",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/c7b788a352b51b81ffee6df0c591f2344a2c732c7fdf8724221e9a6c7a2bd9fa"],
+        ["hash://md5/4926d96ea11847b0b34ec82a5857961f"]
+      ],
+      "name": "part-2.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 7401054,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_itis/part-2.parquet"
+    },
+    {
+      "id": "hash://sha256/b4fb103c6e965ddc670c4dc84cfe09aa3cec490a9af3a33c5864f755e9298b78",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/b4fb103c6e965ddc670c4dc84cfe09aa3cec490a9af3a33c5864f755e9298b78"],
+        ["hash://md5/21c64060a524bfff633a43fb4b054f42"]
+      ],
+      "name": "part-3.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 6944171,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_itis/part-3.parquet"
+    },
+    {
+      "id": "hash://sha256/72d3bbbfd2ba4263ae34caaf464a3eb4f4ce3fabe8468e7d27072ff3487cd839",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/72d3bbbfd2ba4263ae34caaf464a3eb4f4ce3fabe8468e7d27072ff3487cd839"],
+        ["hash://md5/15bd9a8475a2087f023a3555b972a183"]
+      ],
+      "name": "part-4.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 3638899,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/dwc_itis/part-4.parquet"
+    },
+    {
+      "id": "hash://sha256/c6c88632ed8b633ee3db8bf58e8fd38064c678d46818db8a19fad98f34f60b8b",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/c6c88632ed8b633ee3db8bf58e8fd38064c678d46818db8a19fad98f34f60b8b"],
+        ["hash://md5/11a8fec2d817fad15c845cb0fd702f64"]
+      ],
+      "name": "part-0.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 4894484,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/common_itis/part-0.parquet"
+    },
+    {
+      "id": "hash://sha256/f78d3b0c1704e820176d5e09c24eb002f88fa79befa5b4adc8f6ebe9d35e93ea",
+      "type": "DataDownload",
+      "identifier": [
+        ["hash://sha256/f78d3b0c1704e820176d5e09c24eb002f88fa79befa5b4adc8f6ebe9d35e93ea"],
+        ["hash://md5/e9b5a228711720ff6dbf77789dfb8d83"]
+      ],
+      "name": "part-1.parquet",
+      "description": "output data",
+      "encodingFormat": "application/vnd.apache.parquet",
+      "contentSize": 2615546,
+      "contentUrl": "https://github.com/boettiger-lab/taxadb-cache/raw/master/data/2022/common_itis/part-1.parquet"
     }
-  ]
+  ],
+  "identifier": "https://doi.org/10.5066/F7KH0KBK",
+  "version": "22.12",
+  "url": "https://itis.gov"
 }

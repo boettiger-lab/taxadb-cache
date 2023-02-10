@@ -55,7 +55,7 @@ prov::write_prov(#data_in = path,
                                 id = "https://opentreeoflife.org"),
                  version = "22.12",
                  issued = "2022-12-01",
-                 prov="ott_schema.json",
+                 prov="prov/ott_schema.json",
                  append=FALSE,
                  schema="http://schema.org")
 

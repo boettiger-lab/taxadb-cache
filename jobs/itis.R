@@ -38,10 +38,11 @@ output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/
                       output_paths)
 
 
-code <- c("R/itis.R","R/helper-routines.R", "jobs/itis.R")
+#code <- c("R/itis.R","R/helper-routines.R", "jobs/itis.R")
+
 prov::write_prov(#data_in = in_url,
                  #code = code, 
-                 data_out =  unname(output_paths),
+                 data_out =  output_urls,
                  title = "Integrated Taxonomic Information System (ITIS)",
                  description = "Darwin Core formatted version of ITIS Taxonomy, created by rOpenSci",
                  license = "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
@@ -53,7 +54,8 @@ prov::write_prov(#data_in = in_url,
                  version = "22.12",
                  issued = "2022-12-01",
                  url = "https://itis.gov",
-                 prov="itis_schema.json",
-                 schema="http://schema.org")
+                 prov="prov/itis_schema.json",
+                 schema="http://schema.org",
+                 append= FALSE)
 
 
