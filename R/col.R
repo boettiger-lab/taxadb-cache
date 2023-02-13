@@ -36,11 +36,15 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
   
   ## Now the hard part.  
   ## We use recursive tree descent by parentTaxa to determine kingdom, phylum, class, order & family. 
-  ids <- taxon %>% filter(taxonomicStatus=="accepted") %>% select(taxonID, parentNameUsageID)
   
-  #( currently a depth of p18 and beyond lead to empty ranks...)
-  recursive_ids <- taxon %>% select(taxonID, parentNameUsageID, taxonomicStatus, taxonRank, scientificName) %>%
-    filter(taxonomicStatus=="accepted", taxonRank == "species") %>%
+  # accepted + provisionally accepted are "accepted" in that they don't map to a different acceptedNameUsageID
+  # better filtered as havin NA in acceptedNameUsageID
+  ids <- taxon %>% filter(is.na(acceptedNameUsageID)) %>% select(taxonID, parentNameUsageID)
+  
+  #( currently a depth of p18 and beyond lead to only empty ranks...)
+  recursive_ids <- taxon %>% 
+    filter(is.na(acceptedNameUsageID), taxonRank == "species") %>%
+    select(taxonID, parentNameUsageID, taxonomicStatus, taxonRank, scientificName) %>%
     left_join(rename(ids, p2 = parentNameUsageID), by = c("parentNameUsageID" = "taxonID")) %>%
     left_join(rename(ids, p3 = parentNameUsageID), by = c("p2" = "taxonID")) %>%
     left_join(rename(ids, p4 = parentNameUsageID), by = c("p3" = "taxonID")) %>%
@@ -59,44 +63,55 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
     left_join(rename(ids, p17 = parentNameUsageID), by = c("p16" = "taxonID")) %>%
     left_join(rename(ids, p18 = parentNameUsageID), by = c("p17" = "taxonID")) %>%
     left_join(rename(ids, p19 = parentNameUsageID), by = c("p18" = "taxonID")) %>%
-    left_join(rename(ids, p20 = parentNameUsageID), by = c("p19" = "taxonID"))
+    left_join(rename(ids, p20 = parentNameUsageID), by = c("p19" = "taxonID")) %>%
+    rename(p1 = parentNameUsageID)
   
+  ## UGH: sometimes the parentNameUsageID references the taxonID corresponding to a name deemed "provisionally accepted" 
+  ## while the identical name is listed under a different identifier as "accepted"
+  #taxon |> filter(parentNameUsageID == "9CJ5R")
+  
+
   # We will only provide hierarchy terms for `taxonRank==species`, taxonomicStatus=="accepted"
 
-  ## Unpacking the recursive ID map requires two pivots -- memory-intensive operations!  
+  ## Unpacking the recursive ID map requires two pivots -- memory-intensive operations!
+  ## all at species rank level, only accepted names here
   long_hierarchy <-
-    recursive_ids %>%
-    tidyr::pivot_longer(starts_with("p"), names_to = "dummy", values_to = "path_id")
-  
+    recursive_ids %>% 
+    tidyr::pivot_longer(starts_with("p"), names_to = "dummy", values_to = "path_id") |>
+    select(-dummy) |> distinct() |> # drop extra rows created by extra depth of possible 20 rank levels
+    filter(!is.na(path_id)) |>
+    select(-taxonomicStatus, -taxonRank) |>
+    rename(name = scientificName)
+    
   ## Now we get accepted ranks:
   ranks <- taxon %>%
-    filter(taxonomicStatus == "accepted") %>%
-    select(taxonID, taxonRank, scientificName) %>%
+    filter(is.na(acceptedNameUsageID)) %>%  ## i.e., accepted + provisionally accepted
+    select(taxonID, taxonRank, taxonomicStatus, scientificName) %>%
     ## even many higher rank names include the authority strings on the name, making string-matching impossible
+    ## note at this stage 'scientificName' is a name-rank pair
     mutate(scientificName = stringi::stri_extract_first_words(scientificName))
+  
   ## and here we go; this is slow...
   wide <- long_hierarchy %>% 
-    select(id = "taxonID", path_id) %>%
-    distinct() %>%  
     left_join(ranks, by = c(path_id = "taxonID")) %>%
     filter(taxonRank %in% c("genus", "family", "order", "class", "phylum", "kingdom")) %>%
-    select(-path_id) %>%    # count(id, taxonRank) %>% filter(n>1) # shows duplicates
-    group_by(id, taxonRank) %>% slice_head(n=1) %>% # avoid duplicate 'family'. #slow 
-    tidyr::spread(taxonRank, scientificName)  # very slow
+    select(-path_id) %>%    # count(taxonID, taxonRank) %>% filter(n>1) # shows duplicates
+    group_by(taxonID, taxonRank) %>% slice_head(n=1) %>% # avoid duplicate 'family', e.g. 
+    tidyr::spread(taxonRank, scientificName)  # very slow (pivot_wider)
   
   # test that we have no spaces in names
   # sapply(wide, function(str) sum(grepl(" ",str)))
   
   ## Now we have the higher classification for all accepted scientific names, we can join it to the 
   ## the core table:
-  taxon <- left_join(taxon, wide, by = c("taxonID" = "id"))
+  taxon_wide <- left_join(taxon, select(wide, -name, -taxonomicStatus))
   
   ## Most scientificName strings for `species` are the genus+specificEpithet+authority
   ## As usual, authority abbreviations are wildly non-standard, preventing most string matching.
   ## We replace them with "genus species"
   
-  taxon <- taxon %>% 
-    filter(taxonRank=="species") %>% 
+  taxon_wide <- taxon_wide %>% 
+  #  filter(taxonRank=="species") %>% 
     mutate(
       scientificName = case_when(
         taxonRank == "species" ~ paste(genus, specificEpithet), # when taxonRank == species, sci name is binomial 
@@ -105,17 +120,23 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
       )
 
   ## if taxonomicStatus is accepted, set acceptedNameUsageID = taxonID (not NA)
-    taxon <- taxon %>% 
+  taxon_wide <- taxon_wide %>% 
       mutate(
         acceptedNameUsageID = case_when(
           taxonomicStatus %in% c("accepted", "provisionally accepted") ~ taxonID
         )
-      )
-
-  taxon <- taxon %>% select(taxonID, acceptedNameUsageID, taxonomicStatus,taxonRank, scientificName,
-                   kingdom, phylum, class, order, family, genus, specificEpithet, infraspecificEpithet,
-                   namePublishedIn, nameAccordingTo, taxonRemarks)
+      ) %>% select(taxonID, acceptedNameUsageID, scientificName,
+                   taxonomicStatus, taxonRank, 
+                   kingdom, phylum, class, order, family, genus, specificEpithet,
+                   infraspecificEpithet, cultivarEpithet, datasetID, 
+                   namePublishedIn, nameAccordingTo, taxonRemarks,
+                   nomenclaturalStatus, nomenclaturalCode,
+                   parentNameUsageID, originalNameUsageID,
+                   "dcterms:references")
     
+                
+  
+  
   vernacular <- read_tsv(file.path(dir, "VernacularName.tsv"))
   # no prefixes in colnames please
   cols <- colnames(vernacular)
@@ -123,10 +144,14 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
   names(vernacular) <- barenames
   #First we create the separate common names table
   comm_table <- vernacular %>%
-    inner_join(bind_rows(filter(taxon, taxonomicStatus=="accepted")), by = "taxonID") %>%
+    inner_join(bind_rows(filter(taxon_wide, taxonomicStatus=="accepted")), by = "taxonID") %>%
     mutate(taxonID = stringi::stri_paste("COL:", taxonID),
            acceptedNameUsageID = stringi::stri_paste("COL:", acceptedNameUsageID)
-           )
+           )  %>% select(taxonID, language, vernacularName,
+                         acceptedNameUsageID, scientificName,
+                         taxonomicStatus, taxonRank, 
+                         kingdom, phylum, class, order, family, genus, specificEpithet,
+                         infraspecificEpithet, cultivarEpithet)
 
   comm_eng <- vernacular %>%
     filter(language == "eng") %>%
@@ -136,7 +161,7 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
 
   
   ## stri_paste respects NAs, avoids "<prefix>:NA"
-  dwc <- taxon %>%
+  dwc <- taxon_wide %>%
     left_join(comm_eng, by = "taxonID") %>%
     mutate(taxonID = stringi::stri_paste("COL:", taxonID),
            acceptedNameUsageID = stringi::stri_paste("COL:", acceptedNameUsageID))
@@ -148,12 +173,12 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
   
   message("writing COL Output...\n")
 
- readr::write_tsv(dwc, output_paths[["dwc"]])
- readr::write_tsv(comm_table, output_paths[["common"]])
+ #readr::write_tsv(dwc, output_paths[["dwc"]])
+ #readr::write_tsv(comm_table, output_paths[["common"]])
  
   year <- lubridate::year(Sys.Date())
  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_col"), max_rows_per_file = 200000L)
- arrow::write_dataset(comm_table, glue::glue("data/{year}/common"), max_rows_per_file = 200000L)
+ arrow::write_dataset(comm_table, glue::glue("data/{year}/common_col"), max_rows_per_file = 200000L)
  
 }
 
