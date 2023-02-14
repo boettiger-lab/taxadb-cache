@@ -1,13 +1,14 @@
 
-ld_append <- function(x) {
-  rdf <- lapply(x, jsonld::jsonld_to_rdf)
-  rdf <- do.call(paste, rdf)
-  out <- jsonld::jsonld_from_rdf(rdf)
-  jsonld::jsonld_compact(out)
-}
+# now in prov
+#ld_append <- function(x) {
+#  rdf <- lapply(x, jsonld::jsonld_to_rdf)
+#  rdf <- do.call(paste, rdf)
+#  out <- jsonld::jsonld_from_rdf(rdf)
+#  jsonld::jsonld_compact(out)
+#}
 
-
-json <- fs::dir_ls("prov") |> ld_append()
+#
+#json <- fs::dir_ls("prov") |> ld_append()
 
 
 # to include only these fields, add:
