@@ -12,7 +12,7 @@
 #' @importFrom stats family setNames
 #' @importFrom utils download.file untar unzip
 #' @details NOTE: A list of  all snapshots available from: http://www.catalogueoflife.org/DCA_Export/archive.php
-preprocess_col <- function(archive = "data/2022_dwca.zip",
+preprocess_col <- function(in_file = "data/2022_dwca.zip",
                            output_paths = c(dwc = "data/dwc_col.tsv.gz",
                                             common = "data/common_col.tsv.gz",
                                             dwc_parquet = "data/dwc_col.parquet",
@@ -21,7 +21,7 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
   
   dir = file.path(tempdir(), "col")
   dir.create(dir, FALSE, FALSE)
-  unzip(archive, exdir=dir)
+  unzip(in_file, exdir=dir)
 
   ## a better read_tsv
   read_tsv <- function(...) readr::read_tsv(..., quote = "",
@@ -37,9 +37,12 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
   ## Now the hard part.  
   ## We use recursive tree descent by parentTaxa to determine kingdom, phylum, class, order & family. 
   
-  # accepted + provisionally accepted are "accepted" in that they don't map to a different acceptedNameUsageID
+  # Important note: only accepted+provisionally accepted names are given parentNameUsageID parents!
+  # accepted + provisionally accepted are "accepted" in that they don't map to a different acceptedNameUsageID (i.e. have NA instead)
   # better filtered as havin NA in acceptedNameUsageID
-  ids <- taxon %>% filter(is.na(acceptedNameUsageID)) %>% select(taxonID, parentNameUsageID)
+  ids <- taxon %>% 
+    #filter(is.na(acceptedNameUsageID)) %>%
+    select(taxonID, parentNameUsageID)
   
   #( currently a depth of p18 and beyond lead to only empty ranks...)
   recursive_ids <- taxon %>% 
@@ -102,28 +105,38 @@ preprocess_col <- function(archive = "data/2022_dwca.zip",
   # test that we have no spaces in names
   # sapply(wide, function(str) sum(grepl(" ",str)))
   
+  ## If taxonID appears as both accepted and provisionally accepted, keep only former
+  dups <- wide |> count(taxonID) |> filter(n > 1) 
+  dropme <- dups |> mutate(drop = paste(taxonID, "provisionally accepted"))
+  wide_unique <- wide |> 
+    mutate(drop = paste(taxonID, taxonomicStatus)) |> 
+    anti_join(dropme, by="drop") |> select(-drop)
+
   ## Now we have the higher classification for all accepted scientific names, we can join it to the 
   ## the core table:
-  taxon_wide <- left_join(taxon, select(wide, -name, -taxonomicStatus))
+  taxon_wide <- left_join(taxon, select(wide_unique, -name, -taxonomicStatus))
   
   ## Most scientificName strings for `species` are the genus+specificEpithet+authority
   ## As usual, authority abbreviations are wildly non-standard, preventing most string matching.
   ## We replace them with "genus species"
   
   taxon_wide <- taxon_wide %>% 
-  #  filter(taxonRank=="species") %>% 
     mutate(
+      genericName = case_when(is.na(genericName) ~ genus,
+                              .default= genericName),
+      genus = genericName,
       scientificName = case_when(
         taxonRank == "species" ~ paste(genus, specificEpithet), # when taxonRank == species, sci name is binomial 
         !is.na(infraspecificEpithet) ~ infraspecificEpithet     # when infraspecificEpithet is provided, rank is some flavor of subspecies
-        )
+        ),
       )
 
   ## if taxonomicStatus is accepted, set acceptedNameUsageID = taxonID (not NA)
   taxon_wide <- taxon_wide %>% 
       mutate(
         acceptedNameUsageID = case_when(
-          taxonomicStatus %in% c("accepted", "provisionally accepted") ~ taxonID
+          taxonomicStatus %in% c("accepted", "provisionally accepted") ~ taxonID,
+          .default = acceptedNameUsageID
         )
       ) %>% select(taxonID, acceptedNameUsageID, scientificName,
                    taxonomicStatus, taxonRank, 
