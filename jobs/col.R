@@ -5,7 +5,7 @@ library(Hmisc)
 library(fs)
 devtools::load_all()
 
-in_url <- "https://download.checklistbank.org/col/annual/2022_dwca.zip"
+in_url <- "https://download.checklistbank.org/col/annual/2025_dwca.zip"
 #in_url <- paste0("http://www.catalogueoflife.org/DCA_Export/zip-fixed/", 2021, "-annual.zip")
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
