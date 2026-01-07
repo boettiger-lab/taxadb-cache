@@ -16,7 +16,7 @@ preprocess_gbif <- function(archive,
   read_tsv <- function(...) readr::read_tsv(..., quote = "", col_types = readr::cols(.default = "c"))
 
   ## And here we go!
-  dir <- file.path(dir, "backbone")
+  #dir <- file.path(dir, "backbone")
   taxon <- read_tsv(file.path(dir, "Taxon.tsv"))
   ## canonicalName appears to be: Genus + specificEpithet + infraspecificEpithet
   ## i.e. SpecificEpithet ~ a name at the "species" rank
@@ -91,14 +91,14 @@ preprocess_gbif <- function(archive,
 
   dwc <- dwc |> ungroup()
   comm_names <- comm_names |> ungroup()
-  dir.create(dirname(output_paths[["dwc"]]), FALSE)
-  write_tsv(dwc, output_paths[["dwc"]])
-  write_tsv(comm_names, output_paths[["common"]])
+  # dir.create(dirname(output_paths[["dwc"]]), FALSE)
+  # write_tsv(dwc, output_paths[["dwc"]])
+  # write_tsv(comm_names, output_paths[["common"]])
 
   year <- lubridate::year(Sys.Date())
-  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_gbif"), max_rows_per_file = 200000L)
-  arrow::write_dataset(comm_names, glue::glue("data/{year}/common_gbif"), max_rows_per_file = 200000L)
+  arrow::write_dataset(dwc, glue::glue("data/{year}"), basename_template = "dwc_gbif_part_{i}.parquet")
+  arrow::write_dataset(comm_names, glue::glue("data/{year}"), basename_template = "common_gbif_part_{i}.parquet")
   
-  file_hash(output_paths)
+  #file_hash(output_paths)
   list(dwc, comm_names)
 }
