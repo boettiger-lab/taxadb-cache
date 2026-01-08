@@ -214,15 +214,15 @@ preprocess_itis <- function(archive,
     ungroup()
 
 
-  dir.create(dirname(output_paths["dwc"]), FALSE)
+  #dir.create(dirname(output_paths["dwc"]), FALSE)
   
-  write_tsv(dwc, "data/dwc_itis.tsv.gz")
-  write_tsv(common, "data/common_itis.tsv.gz")
+  # write_tsv(dwc, "data/dwc_itis.tsv.gz")
+  # write_tsv(common, "data/common_itis.tsv.gz")
   
   
   year <- lubridate::year(Sys.Date())
-  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_itis"), max_rows_per_file = 200000L)
-  arrow::write_dataset(common, glue::glue("data/{year}/common_itis"), max_rows_per_file = 200000L)
+  arrow::write_dataset(dwc, glue::glue("data/{year}"), basename_template = "dwc_itis_part_{i}.parquet")
+  arrow::write_dataset(common, glue::glue("data/{year}"), basename_template = "common_itis_part_{i}.parquet")
   
   
   #write_tsv(dwc, output_paths["dwc"])
