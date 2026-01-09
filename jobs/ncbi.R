@@ -3,7 +3,7 @@ library(prov)
 library(tidyverse)
 library(Hmisc)
 devtools::load_all()
-in_url <- "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2022-12-01.zip"
+in_url <- "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2026-01-01.zip"
 
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
@@ -37,16 +37,16 @@ if (!has_id) {
 
 
 prov::write_prov(data_out = paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
-                                   fs::dir_ls("data/2022/dwc_ncbi", recurse = TRUE)),
-                 title = "v22.12_dwc_ncbi",
+                                   fs::dir_ls("data/2026/dwc_ncbi", recurse = TRUE)),
+                 title = "v26.01_dwc_ncbi",
                  description = "Darwin Core formatted version of NCBI Taxonomic Names, created by rOpenSci",
                  license = "Public Domain",
                  creator = list("type" = "Organization", name = "NCBI",
                                 id = "https://www.ncbi.nlm.nih.gov",
                                 url = "https://www.ncbi.nlm.nih.gov"
                                 ),
-                 version = "22.12",
-                 issued = "2022-12-01",
+                 version = "26.01",
+                 issued = "2026-01-01",
                  url = "https://www.ncbi.nlm.nih.gov/taxonomy",
                  prov="schema.json",
                  append = TRUE,
@@ -54,16 +54,16 @@ prov::write_prov(data_out = paste0("https://github.com/boettiger-lab/taxadb-cach
 
 
 prov::write_prov(data_out = paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
-                                   fs::dir_ls("data/2022/common_ncbi", recurse = TRUE)),
-                 title = "v22.12_common_ncbi",
+                                   fs::dir_ls("data/2026/common_ncbi", recurse = TRUE)),
+                 title = "v26.01_common_ncbi",
                  description = "Common Names table derived from NCBI Taxonomic Names, created by rOpenSci",
                  license = "Public Domain",
                  creator = list("type" = "Organization", name = "NCBI",
                                 id = "https://www.ncbi.nlm.nih.gov",
                                 url = "https://www.ncbi.nlm.nih.gov"
                  ),
-                 version = "22.12",
-                 issued = "2022-12-01",
+                 version = "26.01",
+                 issued = "2026-01-01",
                  url = "https://www.ncbi.nlm.nih.gov/taxonomy",
                  prov="schema.json",
                  append = TRUE,

@@ -258,16 +258,16 @@ preprocess_ncbi <- function(archive,
   #DBI::dbExecute(db, "COPY (SELECT * FROM comm_table) TO 'common_ncbi.parquet' (FORMAT 'parquet');")
   
   comm_table <- comm_table %>% collect() |> ungroup()
-  write_tsv(dwc, "data/dwc_ncbi.tsv.gz")
-  write_tsv(comm_table, "data/common_ncbi.tsv.gz")
+  
+  # write_tsv(dwc, "data/dwc_ncbi.tsv.gz")
+  # write_tsv(comm_table, "data/common_ncbi.tsv.gz")
   
   
   year <- lubridate::year(Sys.Date())
-  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_ncbi"), max_rows_per_file = 200000L)
-  arrow::write_dataset(comm_table, glue::glue("data/{year}/common_ncbi"), max_rows_per_file = 200000L)
+  arrow::write_dataset(dwc, glue::glue("data/{year}"), basename_template = "dwc_ncbi_part_{i}.parquet")
+  arrow::write_dataset(comm_table, glue::glue("data/{year}"), basename_template = "common_ncbi_part_{i}.parquet")
   
-  
-  file_hash(output_paths)
+  #file_hash(output_paths)
   
   db  
 }

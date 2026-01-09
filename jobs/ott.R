@@ -5,7 +5,7 @@ library(Hmisc)
 devtools::load_all()
 
 
-in_url <- "http://files.opentreeoflife.org/ott/ott3.4/ott3.4.tgz"
+in_url <- "https://files.opentreeoflife.org/ott/ott3.7.3/ott3.7.3.tgz"
 id <- contentid::store(in_url)
 in_file <- contentid::resolve(id)
 path <- file.path("data", basename(in_url))
@@ -26,10 +26,10 @@ if(!has_id) {
   tbls <- preprocess_ott(path)
 }
 
-output_paths = list(dwc = "data/dwc_ott.tsv.gz",
-                 dwc_parquet =  "data/dwc_ott.parquet")
-readr::write_tsv(tbls$dwc, output_paths$dwc)
-arrow::write_parquet(tbls$dwc, output_paths$dwc_parquet)
+# output_paths = list(dwc = "data/dwc_ott.tsv.gz",
+#                  dwc_parquet =  "data/dwc_ott.parquet")
+# readr::write_tsv(tbls$dwc, output_paths$dwc)
+# arrow::write_parquet(tbls$dwc, output_paths$dwc_parquet)
 
 
 #readr::write_tsv(comm_table, "data/common_ott.tsv.gz")
@@ -39,13 +39,13 @@ arrow::write_parquet(tbls$dwc, output_paths$dwc_parquet)
 
 #code <- c("R/ott.R","R/helper-routines.R", "jobs/ott.R")
 
-output_paths <- c(fs::dir_ls("data/2022/dwc_ott", recurse = TRUE)) |> unname()
+output_paths <- c(fs::dir_ls("data/2026/dwc_ott", recurse = TRUE)) |> unname()
 output_urls <- paste0("https://github.com/boettiger-lab/taxadb-cache/raw/master/", 
                       output_paths)
 prov::write_prov(#data_in = path,
                  #code = code, 
                  data_out = output_urls,
-                 title = "v22.12_dwc_ott",
+                 title = "v25.12_dwc_ott",
                  description = "Darwin Core formatted version of Open Tree of Life Taxonomic Names, created by rOpenSci",
                  license = "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
                  url = "https://files.opentreeoflife.org/ott",
@@ -53,8 +53,8 @@ prov::write_prov(#data_in = path,
                                 name = "Open Tree Of Life",
                                 url = "https://opentreeoflife.org",
                                 id = "https://opentreeoflife.org"),
-                 version = "22.12",
-                 issued = "2022-12-01",
+                 version = "25.12",
+                 issued = "2025-12-22",
                  prov="schema.json",
                  append=TRUE,
                  schema="http://schema.org")

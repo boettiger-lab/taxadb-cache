@@ -190,8 +190,8 @@ preprocess_col <- function(in_file = "data/2022_dwca.zip",
  #readr::write_tsv(comm_table, output_paths[["common"]])
  
   year <- lubridate::year(Sys.Date())
- arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_col"), max_rows_per_file = 200000L)
- arrow::write_dataset(comm_table, glue::glue("data/{year}/common_col"), max_rows_per_file = 200000L)
+ arrow::write_dataset(dwc, glue::glue("data/{year}"),  basename_template = "dwc_col_part_{i}.parquet")
+ arrow::write_dataset(comm_table, glue::glue("data/{year}"),  basename_template = "common_col_part_{i}.parquet")
  
 }
 

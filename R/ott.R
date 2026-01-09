@@ -171,7 +171,7 @@ preprocess_ott <- function(archive){
   
   dwc <- dwc %>% mutate(scientificName = taxadb:::clean_names(scientificName, lowercase=FALSE))
   year <- lubridate::year(Sys.Date())
-  arrow::write_dataset(dwc, glue::glue("data/{year}/dwc_ott"), max_rows_per_file = 200000L)
+  arrow::write_dataset(dwc, glue::glue("data/{year}"), basename_template = "dwc_ott_part_{i}.parquet")
   
   #write_tsv(dwc, output_paths["dwc"])
   list(dwc = dwc, common = NULL)
